@@ -704,6 +704,8 @@ class aobject(object):
 
 def auth_check(perm, default=False):
     def check(ctx):
+        if ctx.author.id in ctx.bot.owner_ids:
+            return True
         authcog = ctx.bot.get_cog("GlobalAdmin")
         if not authcog:
             return default
