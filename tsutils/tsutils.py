@@ -44,12 +44,12 @@ JP_TZ_OBJ = pytz.timezone('Asia/Tokyo')
 # 2190-2195 : Arrows
 # u203B     : Weird asterisk thing
 
-JP_REGEX_STR = r'[\u3000-\u303F]|[\u3040-\u309F]|[\u30A0-\u30FF]|[\uFF00-\uFFEF]|[\u4E00-\u9FAF]|[\u2605-\u2606]|[\u2190-\u2195]|\u203B'
-JP_REGEX = re.compile(JP_REGEX_STR)
+JA_REGEX_STR = r'[\u3000-\u303F]|[\u3040-\u309F]|[\u30A0-\u30FF]|[\uFF00-\uFFEF]|[\u4E00-\u9FAF]|[\u2605-\u2606]|[\u2190-\u2195]|\u203B'
+JA_REGEX = re.compile(JA_REGEX_STR)
 
 
-def containsJp(txt):
-    return JP_REGEX.search(txt)
+def containsJa(txt):
+    return JA_REGEX.search(txt)
 
 
 def get_role(roles, role_string):
