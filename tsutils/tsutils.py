@@ -52,40 +52,6 @@ def containsJa(txt):
     return JA_REGEX.search(txt)
 
 
-def get_role(roles, role_string):
-    if role_string.lower() == "everyone":
-        role_string = "@everyone"
-
-    role = discord.utils.find(
-        lambda r: r.name.lower() == role_string.lower(), roles)
-
-    if role is None:
-        logger.error("Could not find role named " + role_string)
-        raise commands.UserFeedbackCheckFailure("Could not find role named " + role_string)
-
-    return role
-
-
-def get_role_from_id(bot, guild, roleid):
-    try:
-        roles = guild.roles
-    except AttributeError:
-        guild = get_server_from_id(bot, guild)
-        try:
-            roles = guild.roles
-        except AttributeError:
-            raise ValueError("Role with id {} not found.".format(roleid))
-
-    role = discord.utils.get(roles, id=roleid)
-    if role is None:
-        raise commands.UserFeedbackCheckFailure("Could not find role id {} in guild {}".format(roleid, guild.name))
-    return role
-
-
-def get_server_from_id(bot, serverid):
-    return discord.utils.get(bot.get_guild, id=serverid)
-
-
 def normalizeServer(server):
     server = server.upper()
     return 'NA' if server == 'US' else server
@@ -124,18 +90,6 @@ def safe_read_json(file_path):
     return {}
 
 
-def ensure_json_exists(file_dir, file_name):
-    if not os.path.exists(file_dir):
-        logger.debug("Creating dir: ", file_dir)
-        os.makedirs(file_dir)
-    file_path = os.path.join(file_dir, file_name)
-    try:
-        readJsonFile(file_path)
-    except:
-        logger.error('File missing or invalid json: {}'.format(file_path))
-        writeJsonFile(file_path, {})
-
-
 @backoff.on_exception(backoff.expo, aiohttp.ClientError, max_time=60)
 @backoff.on_exception(backoff.expo, aiohttp.ServerDisconnectedError, max_time=60)
 async def async_cached_dadguide_request(file_path, file_url, expiry_secs):
@@ -170,11 +124,6 @@ async def makeAsyncCachedPlainRequest(file_path, file_url, expiry_secs):
     return readPlainFile(file_path)
 
 
-async def boxPagifySay(say_fn, msg):
-    for page in pagify(msg, delims=["\n"]):
-        await say_fn(box(page))
-
-
 class EmojiUpdater(object):
     # a pass-through class that does nothing to the emoji dictionary
     # or to the selected emoji
@@ -188,6 +137,7 @@ class EmojiUpdater(object):
 
 
 class Menu():
+    """Menu by https://github.com/Awoonar/Dusty-Cogs/blob/master/menu/menu.py"""
     def __init__(self, bot):
         self.bot = bot
 
@@ -503,26 +453,6 @@ class CogSettings(object):
         return {}
 
 
-async def get_prefix(bot: Red, message: discord.Message, text: str = None) -> Optional[str]:
-    text = text or message.content or ''
-    for p in await get_prefixes(bot, message):
-        if text.startswith(p):
-            return p
-    return None
-
-
-async def get_prefixes(bot: Red, message: discord.Message) -> List[str]:
-    prefixes = await bot.get_prefix(message)  # This returns all server prefixes
-    if isinstance(prefixes, str):
-        prefixes = [prefixes]
-
-    # In case some idiot sets a null prefix
-    if "" in prefixes:
-        prefixes.remove("")
-
-    return prefixes
-
-
 def strip_right_multiline(txt: str):
     """Useful for prettytable output where there is a lot of right spaces,"""
     return '\n'.join([x.strip() for x in txt.splitlines()])
@@ -580,15 +510,6 @@ async def await_and_remove(bot, react_msg, listen_user, delete_msgs=None, emoji=
         msgs = delete_msgs or [react_msg]
         for m in msgs:
             await m.delete_message()
-
-
-loop_executor = concurrent.futures.ThreadPoolExecutor(max_workers=1)
-
-
-async def run_in_loop(bot, task, *args):
-    event_loop = asyncio.get_event_loop()
-    running_task = event_loop.run_in_executor(loop_executor, task, *args)
-    return await running_task
 
 
 def validate_json(fp):
@@ -679,9 +600,10 @@ async def doubleup(ctx, message):
 async def repeating_timer(seconds, condition=lambda:True, start_immediately=True):
     if start_immediately:
         yield
-    while True and condition():
+    while condition():
         await asyncio.sleep(seconds)
         yield
+
 
 def deepget(mapping, keys, default):
     o = mapping
@@ -692,6 +614,7 @@ def deepget(mapping, keys, default):
             return default
     return o
 
+
 class aobject(object):
     """Inheriting this class allows you to define an async __init__."""
     async def __new__(cls, *args, **kwargs):
@@ -701,6 +624,7 @@ class aobject(object):
 
     async def __init__(self):
         pass
+
 
 def auth_check(perm, default=False):
     def check(ctx):
