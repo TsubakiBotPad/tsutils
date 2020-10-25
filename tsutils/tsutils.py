@@ -554,7 +554,7 @@ async def confirm_message(ctx, text, yemoji = "✅", nemoji = "❌", timeout = 1
         if r.emoji == yemoji:
             ret = True
     except asyncio.TimeoutError:
-        pass
+        ret = None
 
     await msg.delete()
     return ret
