@@ -1,9 +1,0 @@
-README.md
-setup.py
-tsutils/__init__.py
-tsutils/tsutils.py
-tsutils.egg-info/PKG-INFO
-tsutils.egg-info/SOURCES.txt
-tsutils.egg-info/dependency_links.txt
-tsutils.egg-info/requires.txt
-tsutils.egg-info/top_level.txt
