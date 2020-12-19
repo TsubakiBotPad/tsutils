@@ -1,3 +1,5 @@
 
 *.whl
 *.pyc
+
+.idea/*
