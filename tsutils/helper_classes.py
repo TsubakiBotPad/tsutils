@@ -29,3 +29,9 @@ class CtxIO(io.IOBase):
 
     def write(self, data):
         asyncio.ensure_future(self.ctx.send(data))
+
+
+class DummyObject(dict):
+    def __init__(self, item):
+        super().__init__(item)
+        self.__dict__ = self
