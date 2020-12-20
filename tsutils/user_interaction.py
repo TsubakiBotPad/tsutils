@@ -3,7 +3,7 @@ import re
 
 
 async def doubleup(ctx, message):
-    """Edit the last message to include the stringx2or more if would otherwise be repeated"""
+    """Edit the last message to include the string `x2` or more if would otherwise be repeated"""
     lmessage = await ctx.history().__anext__()
     fullmatch = re.escape(message) + r"(?: x(\d+))?"
     match = re.match(fullmatch, lmessage.content)

@@ -1,6 +1,6 @@
 from redbot.core import commands
 
-from .user_interaction import make_non_gatekeeping_check
+from .helper_functions import make_non_gatekeeping_check
 
 
 def auth_check(perm, default=False):
