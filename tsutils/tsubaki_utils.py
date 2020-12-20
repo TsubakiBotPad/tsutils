@@ -1,3 +1,4 @@
+import discord.ext
 from redbot.core import commands
 
 
@@ -13,13 +14,33 @@ def auth_check(perm, default=False):
     return commands.check(check)
 
 
-def is_donor(only_patron=False):
-    def check(ctx):
-        if ctx.author.id in ctx.bot.owner_ids:
-            return True
-        donationcog = ctx.bot.get_cog("Donations")
-        if not donationcog:
-            return False
-        return donationcog.is_donor(ctx, only_patron)
+def make_non_gatekeeping_check(condition, failmessage):
+    def non_gatekeep_check(**kwargs):
+        def decorator(command):
+            @command.before_invoke
+            async def hook(instance, ctx):
+                if not condition(ctx, **kwargs):
+                    await ctx.send(failmessage.format(ctx))
+                    raise discord.ext.commands.CheckFailure()
 
-    return commands.check(check)
+            return command
+
+        return decorator
+
+    return non_gatekeep_check
+
+
+def _is_donor(ctx, only_patron=False):
+    if ctx.author.id in ctx.bot.owner_ids:
+        return True
+    donationcog = ctx.bot.get_cog("Donations")
+    if not donationcog:
+        return False
+    return donationcog.is_donor(ctx, only_patron)
+
+
+is_donor = make_non_gatekeeping_check(
+    _is_donor,
+    ("Sorry, but this is a Donor Only command.  Learn "
+     "more about donation via `{0.prefix}donate`")
+)
