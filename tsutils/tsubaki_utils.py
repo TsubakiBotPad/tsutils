@@ -1,6 +1,8 @@
 import discord.ext
 from redbot.core import commands
 
+from .user_interaction import make_non_gatekeeping_check
+
 
 def auth_check(perm, default=False):
     def check(ctx):
@@ -12,22 +14,6 @@ def auth_check(perm, default=False):
         return authcog.settings.get_perm(ctx.author.id, perm, default=default)
 
     return commands.check(check)
-
-
-def make_non_gatekeeping_check(condition, failmessage):
-    def non_gatekeep_check(**kwargs):
-        def decorator(command):
-            @command.before_invoke
-            async def hook(instance, ctx):
-                if not condition(ctx, **kwargs):
-                    await ctx.send(failmessage.format(ctx))
-                    raise discord.ext.commands.CheckFailure()
-
-            return command
-
-        return decorator
-
-    return non_gatekeep_check
 
 
 def _is_donor(ctx, only_patron=False):
