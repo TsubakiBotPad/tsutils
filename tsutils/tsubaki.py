@@ -1,4 +1,3 @@
-import discord.ext
 from redbot.core import commands
 
 from .user_interaction import make_non_gatekeeping_check

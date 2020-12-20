@@ -1,4 +1,5 @@
 import asyncio
+import discord.ext
 import errno
 import os
 import signal
@@ -62,3 +63,19 @@ def deepget(mapping, keys, default):
         except KeyError:
             return default
     return o
+
+
+def make_non_gatekeeping_check(condition, failmessage):
+    def non_gatekeep_check(**kwargs):
+        def decorator(command):
+            @command.before_invoke
+            async def hook(instance, ctx):
+                if not condition(ctx, **kwargs):
+                    await ctx.send(failmessage.format(ctx))
+                    raise discord.ext.commands.CheckFailure()
+
+            return command
+
+        return decorator
+
+    return non_gatekeep_check

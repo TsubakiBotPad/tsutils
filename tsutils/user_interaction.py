@@ -3,7 +3,7 @@ import re
 
 
 async def doubleup(ctx, message):
-    """Edit the last message to x2 or more if it's being repeated"""
+    """Edit the last message to include the stringx2or more if would otherwise be repeated"""
     lmessage = await ctx.history().__anext__()
     fullmatch = re.escape(message) + r"(?: x(\d+))?"
     match = re.match(fullmatch, lmessage.content)
@@ -64,19 +64,3 @@ async def await_and_remove(bot, react_msg, listen_user, delete_msgs=None, emoji=
         msgs = delete_msgs or [react_msg]
         for m in msgs:
             await m.delete_message()
-
-
-def make_non_gatekeeping_check(condition, failmessage):
-    def non_gatekeep_check(**kwargs):
-        def decorator(command):
-            @command.before_invoke
-            async def hook(instance, ctx):
-                if not condition(ctx, **kwargs):
-                    await ctx.send(failmessage.format(ctx))
-                    raise discord.ext.commands.CheckFailure()
-
-            return command
-
-        return decorator
-
-    return non_gatekeep_check
