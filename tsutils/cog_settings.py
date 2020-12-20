@@ -3,19 +3,6 @@ from redbot.core import data_manager
 from .json_utils import *
 
 
-def intify(key):
-    if isinstance(key, dict):
-        return {intify(k): intify(v) for k, v in key.items()}
-    elif isinstance(key, (list, tuple)):
-        return [intify(x) for x in key]
-    elif isinstance(key, str) and key.isdigit():
-        return int(key)
-    elif isinstance(key, str) and key.replace('.', '', 1).isdigit():
-        return float(key)
-    else:
-        return key
-
-
 class CogSettings(object):
     SETTINGS_FILE_NAME = "legacy_settings.json"
 
@@ -33,7 +20,7 @@ class CogSettings(object):
             self.bot_settings = self.default_settings
             self.save_settings()
         else:
-            current = intify(readJsonFile(self.file_path))
+            current = self.intify(readJsonFile(self.file_path))
             updated = False
             for key in self.default_settings.keys():
                 if key not in current.keys():
@@ -54,3 +41,16 @@ class CogSettings(object):
 
     def make_default_settings(self):
         return {}
+
+    @classmethod
+    def intify(cls, key):
+        if isinstance(key, dict):
+            return {cls.intify(k): cls.intify(v) for k, v in key.items()}
+        elif isinstance(key, (list, tuple)):
+            return [cls.intify(x) for x in key]
+        elif isinstance(key, str) and key.isdigit():
+            return int(key)
+        elif isinstance(key, str) and key.replace('.', '', 1).isdigit():
+            return float(key)
+        else:
+            return key
