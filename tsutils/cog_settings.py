@@ -20,7 +20,7 @@ class CogSettings(object):
             self.bot_settings = self.default_settings
             self.save_settings()
         else:
-            current = self.intify(readJsonFile(self.file_path))
+            current = self.intify(read_json_file(self.file_path))
             updated = False
             for key in self.default_settings.keys():
                 if key not in current.keys():
@@ -37,7 +37,7 @@ class CogSettings(object):
             os.makedirs(self.folder)
 
     def save_settings(self):
-        writeJsonFile(self.file_path, self.bot_settings)
+        write_json_file(self.file_path, self.bot_settings)
 
     def make_default_settings(self):
         return {}

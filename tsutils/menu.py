@@ -5,13 +5,13 @@ import discord
 
 
 class EmojiUpdater(object):
-    # a pass-through class that does nothing to the emoji dictionary
+    # a pass-through base class that does nothing to the emoji dictionary
     # or to the selected emoji
     def __init__(self, emoji_to_embed, **kwargs):
         self.emoji_dict = emoji_to_embed
         self.selected_emoji = None
 
-    def on_update(self, ctx, selected_emoji):
+    async def on_update(self, ctx, selected_emoji):
         self.selected_emoji = selected_emoji
         return True
 
@@ -151,7 +151,7 @@ class Menu():
 
         # update the emoji mapping however we need to, or just pass through and do nothing
 
-        allowed_action = emoji_to_message.on_update(ctx, react_emoji)
+        allowed_action = await emoji_to_message.on_update(ctx, react_emoji)
         return await self._custom_menu(
             ctx, emoji_to_message, emoji_to_message.selected_emoji,
             timeout=timeout,

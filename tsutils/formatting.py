@@ -14,15 +14,16 @@ import unicodedata
 # 2190-2195 : Arrows
 # u203B     : Weird asterisk thing
 
-JA_REGEX_STR = r'[\u3000-\u303F]|[\u3040-\u309F]|[\u30A0-\u30FF]|[\uFF00-\uFFEF]|[\u4E00-\u9FAF]|[\u2605-\u2606]|[\u2190-\u2195]|\u203B'
+JA_REGEX_STR = (r'[\u3000-\u303F]|[\u3040-\u309F]|[\u30A0-\u30FF]|[\uFF00-\uFFEF]'
+                r'|[\u4E00-\u9FAF]|[\u2605-\u2606]|[\u2190-\u2195]|\u203B')
 JA_REGEX = re.compile(JA_REGEX_STR)
 
 
-def containsJa(txt):
+def contains_ja(txt):
     return JA_REGEX.search(txt)
 
 
-def normalizeServer(server):
+def normalize_server_name(server):
     server = server.upper()
     return 'NA' if server == 'US' else server
 
@@ -40,20 +41,19 @@ def extract_image_url(m):
     return None
 
 
-def rmdiacritics(input):
-    '''
-    Return the base character of char, by "removing" any
+def rmdiacritics(string):
+    """ Return the base character of char, by "removing" any
     diacritics like accents or curls and strokes and the like.
-    '''
+    """
     output = ''
-    for c in input:
+    for c in string:
         try:
             desc = unicodedata.name(c)
             cutoff = desc.find(' WITH ')
             if cutoff != -1:
                 desc = desc[:cutoff]
             output += unicodedata.lookup(desc)
-        except:
+        except KeyError:
             output += c
     return output
 
@@ -64,5 +64,5 @@ def clean_global_mentions(content):
 
 
 def strip_right_multiline(txt: str):
-    """Useful for prettytable output where there is a lot of right spaces,"""
+    """Useful for prettytable output where there are a lot of right spaces."""
     return '\n'.join([x.strip() for x in txt.splitlines()])

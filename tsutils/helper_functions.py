@@ -66,6 +66,11 @@ def deepget(mapping, keys, default):
 
 
 def make_non_gatekeeping_check(condition, failmessage):
+    """Creates a check decorator that doesn't stop the a user from seeing a command.
+
+    It only shows a "You don't have permission to use this" string (specified by failmessage)
+    if an invalid user tries to use it."""
+
     def non_gatekeep_check(**kwargs):
         def decorator(command):
             @command.before_invoke

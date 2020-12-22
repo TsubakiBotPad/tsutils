@@ -24,20 +24,21 @@ def should_download(file_path, expiry_secs):
         return False
 
 
-def writeJsonFile(file_path, js_data):
+def write_json_file(file_path, js_data):
     with open(file_path, "w") as f:
         json.dump(js_data, f, indent=4)
 
 
-def readJsonFile(file_path):
-    with open(file_path, "r") as f:
+def read_json_file(file_path):
+    with open(file_path) as f:
         return json.load(f)
 
 
 def safe_read_json(file_path):
+    """This returns an empty dict rather than raising an error if the file contains invalid json"""
     try:
-        return readJsonFile(file_path)
-    except Exception as ex:
+        return read_json_file(file_path)
+    except json.JSONDecodeError as ex:
         logger.error('failed to read {} got exception'.format(file_path), exc_info=True)
     return {}
 
@@ -46,7 +47,7 @@ def validate_json(fp):
     try:
         json.load(open(fp))
         return True
-    except:
+    except json.JSONDecodeError:
         return False
 
 
@@ -61,24 +62,24 @@ async def async_cached_dadguide_request(file_path, file_url, expiry_secs):
                     f.write(await resp.read())
 
 
-def writePlainFile(file_path, text_data):
+def write_plain_file(file_path, text_data):
     with open(file_path, "w", encoding='utf-8') as f:
         f.write(text_data)
 
 
-def readPlainFile(file_path):
+def read_plain_file(file_path):
     with open(file_path, "r", encoding='utf-8') as f:
         return f.read()
 
 
-async def makeAsyncPlainRequest(file_url):
+async def async_plain_request(file_url):
     async with aiohttp.ClientSession() as session:
         async with session.get(file_url) as resp:
             return await resp.text()
 
 
-async def makeAsyncCachedPlainRequest(file_path, file_url, expiry_secs):
+async def async_cached_plain_request(file_path, file_url, expiry_secs):
     if should_download(file_path, expiry_secs):
-        resp = await makeAsyncPlainRequest(file_url)
-        writePlainFile(file_path, resp)
-    return readPlainFile(file_path)
+        resp = await async_plain_request(file_url)
+        write_plain_file(file_path, resp)
+    return read_plain_file(file_path)
