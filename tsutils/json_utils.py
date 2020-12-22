@@ -30,14 +30,15 @@ def write_json_file(file_path, js_data):
 
 
 def read_json_file(file_path):
-    with open(file_path, "r") as f:
+    with open(file_path) as f:
         return json.load(f)
 
 
 def safe_read_json(file_path):
+    """This returns an empty dict rather than raising an error if the file contains invalid json"""
     try:
         return read_json_file(file_path)
-    except Exception as ex:
+    except json.JSONDecodeError as ex:
         logger.error('failed to read {} got exception'.format(file_path), exc_info=True)
     return {}
 
@@ -46,7 +47,7 @@ def validate_json(fp):
     try:
         json.load(open(fp))
         return True
-    except Exception:
+    except json.JSONDecodeError:
         return False
 
 
@@ -71,14 +72,14 @@ def read_plain_file(file_path):
         return f.read()
 
 
-async def make_async_plain_request(file_url):
+async def async_plain_request(file_url):
     async with aiohttp.ClientSession() as session:
         async with session.get(file_url) as resp:
             return await resp.text()
 
 
-async def make_async_cached_plain_request(file_path, file_url, expiry_secs):
+async def async_cached_plain_request(file_path, file_url, expiry_secs):
     if should_download(file_path, expiry_secs):
-        resp = await make_async_plain_request(file_url)
+        resp = await async_plain_request(file_url)
         write_plain_file(file_path, resp)
     return read_plain_file(file_path)

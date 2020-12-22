@@ -32,6 +32,9 @@ class CtxIO(io.IOBase):
 
 
 class DummyObject(dict):
-    def __init__(self, item):
+    def __init__(self, item=None, **kwargs):
+        if item is None:
+            item = {}
+        item.update(kwargs)
         super().__init__(item)
-        self.__dict__ = self
+        self.__dict__ = item

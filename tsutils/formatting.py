@@ -23,7 +23,7 @@ def contains_ja(txt):
     return JA_REGEX.search(txt)
 
 
-def normalize_server(server):
+def normalize_server_name(server):
     server = server.upper()
     return 'NA' if server == 'US' else server
 
@@ -53,7 +53,7 @@ def rmdiacritics(string):
             if cutoff != -1:
                 desc = desc[:cutoff]
             output += unicodedata.lookup(desc)
-        except Exception:
+        except KeyError:
             output += c
     return output
 
@@ -64,5 +64,5 @@ def clean_global_mentions(content):
 
 
 def strip_right_multiline(txt: str):
-    """Useful for prettytable output where there is a lot of right spaces."""
+    """Useful for prettytable output where there are a lot of right spaces."""
     return '\n'.join([x.strip() for x in txt.splitlines()])
