@@ -145,7 +145,8 @@ class Menu():
             return None, None
 
         try:
-            await message.remove_reaction(react_emoji, p.member)
+            if not isinstance(message.channel, discord.DMChannel):
+                await message.remove_reaction(react_emoji, p.member)
         except discord.Forbidden:
             pass
 
