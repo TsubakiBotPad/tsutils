@@ -38,7 +38,7 @@ def safe_read_json(file_path):
     """This returns an empty dict rather than raising an error if the file contains invalid json"""
     try:
         return read_json_file(file_path)
-    except json.JSONDecodeError as ex:
+    except (json.JSONDecodeError, FileNotFoundError):
         logger.error('failed to read {} got exception'.format(file_path), exc_info=True)
     return {}
 
