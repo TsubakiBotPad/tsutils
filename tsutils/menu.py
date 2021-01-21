@@ -102,11 +102,14 @@ class Menu():
                 await self.show_menu(ctx, message, new_message_content)
 
         if reactions_required:
-            for e in emoji_to_message.emoji_dict:
-                try:
-                    await message.add_reaction(e)
-                except discord.Forbidden:
-                    pass
+            async def addreaction():
+                for e in emoji_to_message.emoji_dict:
+                    try:
+                        await message.add_reaction(e)
+                    except discord.Forbidden:
+                        pass
+
+            asyncio.create_task(addreaction())
 
         def check(payload):
             def default_check(pl):
