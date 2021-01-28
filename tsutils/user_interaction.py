@@ -1,6 +1,8 @@
 import asyncio
 import re
 
+import discord
+
 
 async def send_repeated_consecutive_messages(ctx, message):
     """Edit the last message to include the string `x2` or more if would otherwise be repeated"""
@@ -29,6 +31,33 @@ async def confirm_message(ctx, text, yemoji="✅", nemoji="❌", timeout=10):
         r, u = await ctx.bot.wait_for('reaction_add', check=check, timeout=timeout)
         if r.emoji == yemoji:
             ret = True
+    except asyncio.TimeoutError:
+        ret = None
+
+    await msg.delete()
+    return ret
+
+
+async def get_reaction(ctx, text, *emoji, timeout=10):
+    msg = await ctx.send(text)
+
+    async def addreactions():
+        for e in emoji:
+            try:
+                await msg.add_reaction(e)
+            except (discord.Forbidden, discord.NotFound):
+                pass
+
+    asyncio.create_task(addreactions())
+
+    def check(reaction, user):
+        return (str(reaction.emoji) in emoji
+                and user.id == ctx.author.id
+                and reaction.message.id == msg.id)
+
+    try:
+        r, u = await ctx.bot.wait_for('reaction_add', check=check, timeout=timeout)
+        ret = r.emoji
     except asyncio.TimeoutError:
         ret = None
 
