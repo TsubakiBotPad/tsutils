@@ -57,9 +57,9 @@ async def get_reaction(ctx, text, *emoji, timeout=10):
 
     try:
         r, u = await ctx.bot.wait_for('reaction_add', check=check, timeout=timeout)
-        ret = emoji.index(r.emoji)
+        ret = r.emoji
     except asyncio.TimeoutError:
-        ret = -1
+        ret = None
 
     await msg.delete()
     return ret
