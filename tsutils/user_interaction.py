@@ -93,3 +93,26 @@ async def await_and_remove(bot, react_msg, listen_user, delete_msgs=None, emoji=
         msgs = delete_msgs or [react_msg]
         for m in msgs:
             await m.delete_message()
+
+
+class StatusManager:
+    """An asynchronous context manager to temporary modify the bot's status"""
+    def __init__(self, bot, status=discord.Status.dnd):
+        self.bot = bot
+        self.newstatus = status
+        self.oldstatus = None
+
+    async def __aenter__(self):
+        if not self.bot.guilds:
+            return
+        self.oldstatus = self.bot.guilds[0].me.status
+        activity = self.bot.guilds[0].me.activity
+        await self.bot.change_presence(activity=activity, status=self.newstatus)
+
+    async def __aexit__(self, *args):
+        if self.oldstatus is None \
+                or not self.bot.guilds \
+                or self.bot.guilds[0].me.status != self.newstatus:
+            return
+        activity = self.bot.guilds[0].me.activity
+        await self.bot.change_presence(activity=activity, status=self.oldstatus)
