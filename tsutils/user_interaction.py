@@ -96,9 +96,7 @@ async def await_and_remove(bot, react_msg, listen_user, delete_msgs=None, emoji=
 
 
 class StatusManager:
-    """An asynchronous context manager to temporary place the bot
-    in a different status presence for the duration of the suite
-    """
+    """An asynchronous context manager to temporary modify the bot's status"""
     def __init__(self, bot, status=discord.Status.dnd):
         self.bot = bot
         self.newstatus = status
