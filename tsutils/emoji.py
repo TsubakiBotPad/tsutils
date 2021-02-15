@@ -2,6 +2,7 @@ import re
 
 
 def char_to_emoji(c):
+    """Casts individual characters & the integer 10 as emojis"""
     c = str(c).lower()
     if '0' <= c <= '9':
         names = {
