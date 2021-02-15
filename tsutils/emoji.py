@@ -2,7 +2,7 @@ import re
 
 
 def char_to_emoji(c):
-    c = c.lower()
+    c = str(c).lower()
     if '0' <= c <= '9':
         names = {
             '0': '0⃣',
@@ -15,6 +15,7 @@ def char_to_emoji(c):
             '7': '7⃣',
             '8': '8⃣',
             '9': '9⃣',
+            '10': '\N{KEYCAP TEN}'
         }
         return names[c]
     if c < 'a' or c > 'z':
