@@ -18,8 +18,8 @@ async def send_repeated_consecutive_messages(ctx, message):
 
 async def confirm_message(ctx, text, yemoji="✅", nemoji="❌", timeout=10):
     msg = await ctx.send(text)
-    await msg.add_reaction(yemoji)
-    await msg.add_reaction(nemoji)
+    asyncio.create_task(msg.add_reaction(yemoji))
+    asyncio.create_task(msg.add_reaction(nemoji))
 
     def check(reaction, user):
         return (str(reaction.emoji) in [yemoji, nemoji]
@@ -44,7 +44,7 @@ async def get_reaction(ctx, text, *emoji, timeout=10):
     async def addreactions():
         for e in emoji:
             try:
-                await msg.add_reaction(e)
+                asyncio.create_task(msg.add_reaction(e))
             except (discord.Forbidden, discord.NotFound):
                 pass
 
