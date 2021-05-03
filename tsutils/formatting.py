@@ -53,9 +53,9 @@ def rmdiacritics(string):
             if cutoff != -1:
                 desc = desc[:cutoff]
             output += unicodedata.lookup(desc)
-        except KeyError:
+        except (KeyError, ValueError):
             output += c
-    return output
+    return re.sub("[\u201c\u201d]", '"', output)
 
 
 def clean_global_mentions(content):
