@@ -14,7 +14,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/TsubakiBotPad/tsutils",
     packages=setuptools.find_packages(),
-    install_requires=["pytz", "aiohttp", "backoff"],
+    install_requires=["pytz", "aiohttp", "backoff", "discord-menu"],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
