@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="tsutils",
-    version="3.3.0",
+    version="3.3.1",
     author="The Tsubotki Team",
     author_email="69992611+TsubakiBotPad@users.noreply.github.com",
     license="MIT",
@@ -14,7 +14,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/TsubakiBotPad/tsutils",
     packages=setuptools.find_packages(),
-    install_requires=["pytz", "aiohttp", "backoff"],
+    install_requires=["pytz", "aiohttp", "backoff", "discord-menu"],
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
