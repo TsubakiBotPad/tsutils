@@ -4,7 +4,7 @@ from .formatting import *
 from .helper_classes import *
 from .helper_functions import *
 from .json_utils import *
-from .menu import *
+from .old_menu import *
 from .menu.footers import *
 from .pad import *
 from .tsubaki import *
