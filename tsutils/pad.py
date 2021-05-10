@@ -19,7 +19,7 @@ PDX_JP_ADJUSTMENTS.update(CROWS_2)
 
 def get_pdx_id(m):
     pdx_id = m.monster_no_na
-    if int(m.monster_no) == m.monster_no_jp:
+    if int(m.monster_id) == m.monster_no_jp:
         pdx_id = PDX_JP_ADJUSTMENTS.get(pdx_id, pdx_id)
     return pdx_id
 
