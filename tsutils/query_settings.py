@@ -49,7 +49,7 @@ class QuerySettings:
     @staticmethod
     def deserialize(data: Dict[str, Any]) -> "QuerySettings":
         enumdata = {}
-        for key, value in data.values():
+        for key, value in data.items():
             enumdata[key] = QuerySettings.NAMES_TO_ENUMS[key](value)  # noqa
 
-        return QuerySettings(**data)
+        return QuerySettings(**enumdata)
