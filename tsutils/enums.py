@@ -7,7 +7,6 @@ class Server(Enum):
     KR = "KR"
 
 
-# These are True and False for backwards compatablility.  More values can be added.
 class EvoToFocus(Enum):
     newest = 0
     naprio = 1
