@@ -25,8 +25,8 @@ class QuerySettings:
 
     @staticmethod
     def extract(fm_flags: Dict[str, Any], query: str) -> "QuerySettings":
-        # TODO: Eventually remove this suite once we use Enums everywhere
-        for key, value in fm_flags:
+        fm_flags = fm_flags.copy()
+        for key, value in fm_flags.items():
             if not isinstance(value, Enum):
                 fm_flags[key] = QuerySettings.NAMES_TO_ENUMS[key](value)  # noqa
 
