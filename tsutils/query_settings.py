@@ -2,7 +2,7 @@ import re
 from enum import Enum
 from typing import Any, Dict
 
-from tsutils.enums import Server, SearchPriority, AltEvoSort
+from tsutils.enums import Server, EvoToFocus, AltEvoSort
 
 SETTINGS_REGEX = re.compile(r'(?:--|—)(\w+)(?::{(.+?)})?')
 
@@ -10,13 +10,13 @@ SETTINGS_REGEX = re.compile(r'(?:--|—)(\w+)(?::{(.+?)})?')
 class QuerySettings:
     SERIALIZED_VALUES = ['server', 'evosort']
     NAMES_TO_ENUMS = {
-        'na_prio': SearchPriority,
+        'na_prio': EvoToFocus,
         'server': Server,
         'evosort': AltEvoSort,
     }
 
     def __init__(self,
-                 na_prio: SearchPriority = SearchPriority.naprio,
+                 na_prio: EvoToFocus = EvoToFocus.naprio,
                  server: Server = Server.COMBINED,
                  evosort: AltEvoSort = AltEvoSort.gungho):
         self.na_prio = na_prio

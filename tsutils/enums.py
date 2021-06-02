@@ -8,9 +8,9 @@ class Server(Enum):
 
 
 # These are True and False for backwards compatablility.  More values can be added.
-class SearchPriority(Enum):
-    naprio = True
-    newest = False
+class EvoToFocus(Enum):
+    newest = 0
+    naprio = 1
 
 
 class AltEvoSort(Enum):
