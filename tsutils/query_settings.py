@@ -36,7 +36,7 @@ class QuerySettings:
             elif setting == "allservers":
                 fm_flags['server'] = Server.COMBINED
 
-            if setting in ("gungho", "normal"):
+            if setting == "dfs":
                 fm_flags['evosort'] = AltEvoSort.dfs
             elif setting == "numerical":
                 fm_flags['server'] = AltEvoSort.numerical
