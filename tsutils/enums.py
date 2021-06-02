@@ -13,5 +13,5 @@ class EvoToFocus(Enum):
 
 
 class AltEvoSort(Enum):
-    gungho = 0
+    dfs = 0
     numerical = 1

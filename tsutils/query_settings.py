@@ -18,7 +18,7 @@ class QuerySettings:
     def __init__(self,
                  na_prio: EvoToFocus = EvoToFocus.naprio,
                  server: Server = Server.COMBINED,
-                 evosort: AltEvoSort = AltEvoSort.gungho):
+                 evosort: AltEvoSort = AltEvoSort.dfs):
         self.na_prio = na_prio
         self.server = server
         self.evosort = evosort
@@ -37,7 +37,7 @@ class QuerySettings:
                 fm_flags['server'] = Server.COMBINED
 
             if setting in ("gungho", "normal"):
-                fm_flags['evosort'] = AltEvoSort.gungho
+                fm_flags['evosort'] = AltEvoSort.dfs
             elif setting == "numerical":
                 fm_flags['server'] = AltEvoSort.numerical
 
