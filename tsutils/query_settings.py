@@ -22,6 +22,8 @@ class QuerySettings:
         "dfs": AltEvoSort.dfs,
         "numerical": AltEvoSort.numerical,
         "nadiff": ChildMenuSelector.NaDiffMenu,
+        "nadiffs": ChildMenuSelector.NaDiffMenu,
+        "awakening": ChildMenuSelector.AwakeningList,
         "awakenings": ChildMenuSelector.AwakeningList,
     }
 
