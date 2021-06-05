@@ -13,7 +13,7 @@ class QuerySettings:
         'na_prio': EvoToFocus,
         'server': Server,
         'evosort': AltEvoSort,
-        'menuselect': MenuSelector
+        'menuselect': MenuSelector,
     }
     ENUMS_TO_NAMES = {v: k for k, v in NAMES_TO_ENUMS.items()}
     SETTINGS_TO_ENUMS = {
@@ -22,14 +22,14 @@ class QuerySettings:
         "dfs": AltEvoSort.dfs,
         "numerical": AltEvoSort.numerical,
         "nadiff": MenuSelector.nadiff,
-        "awakening": MenuSelector.awakening,
+        "awakenings": MenuSelector.awakenings,
     }
 
     def __init__(self,
                  na_prio: EvoToFocus = EvoToFocus.naprio,
                  server: Server = Server.COMBINED,
                  evosort: AltEvoSort = AltEvoSort.dfs,
-                 menuselect: MenuSelector = MenuSelector.none):
+                 menuselect: MenuSelector = MenuSelector.id):
         self.na_prio = na_prio
         self.server = server
         self.evosort = evosort
