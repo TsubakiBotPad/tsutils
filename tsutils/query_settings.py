@@ -2,7 +2,7 @@ import re
 from enum import Enum
 from typing import Any, Dict
 
-from tsutils.enums import Server, EvoToFocus, AltEvoSort, MenuSelector
+from tsutils.enums import Server, EvoToFocus, AltEvoSort, ChildMenuSelector
 
 SETTINGS_REGEX = re.compile(r'(?:--|—)(\w+)(?::{(.+?)})?')
 
@@ -21,15 +21,15 @@ class QuerySettings:
         "allservers": Server.COMBINED,
         "dfs": AltEvoSort.dfs,
         "numerical": AltEvoSort.numerical,
-        "nadiff": MenuSelector.NaDiffMenu,
-        "awakenings": MenuSelector.AwakeningList,
+        "nadiff": ChildMenuSelector.NaDiffMenu,
+        "awakenings": ChildMenuSelector.AwakeningList,
     }
 
     def __init__(self,
                  na_prio: EvoToFocus = EvoToFocus.naprio,
                  server: Server = Server.COMBINED,
                  evosort: AltEvoSort = AltEvoSort.dfs,
-                 menuselect: MenuSelector = MenuSelector.IdMenu):
+                 menuselect: ChildMenuSelector = ChildMenuSelector.IdMenu):
         self.na_prio = na_prio
         self.server = server
         self.evosort = evosort
