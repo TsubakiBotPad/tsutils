@@ -21,15 +21,15 @@ class QuerySettings:
         "allservers": Server.COMBINED,
         "dfs": AltEvoSort.dfs,
         "numerical": AltEvoSort.numerical,
-        "nadiff": MenuSelector.nadiff,
-        "awakenings": MenuSelector.awakenings,
+        "nadiff": MenuSelector.NaDiffMenu,
+        "awakenings": MenuSelector.AwakeningList,
     }
 
     def __init__(self,
                  na_prio: EvoToFocus = EvoToFocus.naprio,
                  server: Server = Server.COMBINED,
                  evosort: AltEvoSort = AltEvoSort.dfs,
-                 menuselect: MenuSelector = MenuSelector.id):
+                 menuselect: MenuSelector = MenuSelector.IdMenu):
         self.na_prio = na_prio
         self.server = server
         self.evosort = evosort

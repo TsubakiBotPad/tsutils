@@ -18,6 +18,6 @@ class AltEvoSort(Enum):
 
 
 class MenuSelector(Enum):
-    id = 0
-    nadiff = 1
-    awakenings = 2
+    IdMenu = 0
+    NaDiffMenu = 1
+    AwakeningList = 2
