@@ -2,44 +2,52 @@ import re
 from enum import Enum
 from typing import Any, Dict
 
-from tsutils.enums import Server, EvoToFocus, AltEvoSort
+from tsutils.enums import Server, EvoToFocus, AltEvoSort, MenuSelector
 
 SETTINGS_REGEX = re.compile(r'(?:--|—)(\w+)(?::{(.+?)})?')
 
 
 class QuerySettings:
-    SERIALIZED_VALUES = ['server', 'evosort']
+    SERIALIZED_VALUES = ['server', 'evosort', 'menuselect']
     NAMES_TO_ENUMS = {
         'na_prio': EvoToFocus,
         'server': Server,
         'evosort': AltEvoSort,
+        'menuselect': MenuSelector
+    }
+    ENUMS_TO_NAMES = {v: k for k, v in NAMES_TO_ENUMS.items()}
+    SETTINGS_TO_ENUMS = {
+        "na": Server.NA,
+        "allservers": Server.COMBINED,
+        "dfs": AltEvoSort.dfs,
+        "numerical": AltEvoSort.numerical,
+        "nadiff": MenuSelector.nadiff,
+        "awakening": MenuSelector.awakening,
     }
 
     def __init__(self,
                  na_prio: EvoToFocus = EvoToFocus.naprio,
                  server: Server = Server.COMBINED,
-                 evosort: AltEvoSort = AltEvoSort.dfs):
+                 evosort: AltEvoSort = AltEvoSort.dfs,
+                 menuselect: MenuSelector = MenuSelector.none):
         self.na_prio = na_prio
         self.server = server
         self.evosort = evosort
+        self.menuselect = menuselect
 
-    @staticmethod
-    def extract(fm_flags: Dict[str, Any], query: str) -> "QuerySettings":
+    @classmethod
+    def extract(cls, fm_flags: Dict[str, Any], query: str) -> "QuerySettings":
         fm_flags = fm_flags.copy()
         for key, value in fm_flags.items():
             if not isinstance(value, Enum):
                 fm_flags[key] = QuerySettings.NAMES_TO_ENUMS[key](value)  # noqa
 
-        for setting, data in re.findall(SETTINGS_REGEX, query):
-            if setting == "na":
-                fm_flags['server'] = Server.NA
-            elif setting == "allservers":
-                fm_flags['server'] = Server.COMBINED
-
-            if setting == "dfs":
-                fm_flags['evosort'] = AltEvoSort.dfs
-            elif setting == "numerical":
-                fm_flags['server'] = AltEvoSort.numerical
+        for setting, data in re.findall(SETTINGS_REGEX, query.lower()):
+            if setting not in cls.SETTINGS_TO_ENUMS:
+                continue
+            value = cls.SETTINGS_TO_ENUMS[setting]
+            key = cls.ENUMS_TO_NAMES[type(value)]
+            fm_flags[key] = value
 
         return QuerySettings(**fm_flags)
 

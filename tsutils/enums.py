@@ -15,3 +15,9 @@ class EvoToFocus(Enum):
 class AltEvoSort(Enum):
     dfs = 0
     numerical = 1
+
+
+class MenuSelector(Enum):
+    none = 0
+    nadiff = 1
+    awakening = 2
