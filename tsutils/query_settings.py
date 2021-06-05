@@ -13,7 +13,7 @@ class QuerySettings:
         'na_prio': EvoToFocus,
         'server': Server,
         'evosort': AltEvoSort,
-        'menuselect': MenuSelector,
+        'menuselect': ChildMenuSelector,
     }
     ENUMS_TO_NAMES = {v: k for k, v in NAMES_TO_ENUMS.items()}
     SETTINGS_TO_ENUMS = {
@@ -22,6 +22,8 @@ class QuerySettings:
         "dfs": AltEvoSort.dfs,
         "numerical": AltEvoSort.numerical,
         "nadiff": ChildMenuSelector.NaDiffMenu,
+        "nadiffs": ChildMenuSelector.NaDiffMenu,
+        "awakening": ChildMenuSelector.AwakeningList,
         "awakenings": ChildMenuSelector.AwakeningList,
     }
 
