@@ -21,3 +21,13 @@ class ChildMenuSelector(Enum):
     IdMenu = 0
     NaDiffMenu = 1
     AwakeningList = 2
+
+
+class LsMultiplier(Enum):
+    lsdouble = 0
+    lssingle = 1
+
+
+class CardPlusModifier(Enum):
+    plus0 = 0
+    plus297 = 1

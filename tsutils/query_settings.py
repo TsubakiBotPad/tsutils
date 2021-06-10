@@ -2,18 +2,20 @@ import re
 from enum import Enum
 from typing import Any, Dict
 
-from tsutils.enums import Server, EvoToFocus, AltEvoSort, ChildMenuSelector
+from tsutils.enums import Server, EvoToFocus, AltEvoSort, ChildMenuSelector, LsMultiplier, CardPlusModifier
 
 SETTINGS_REGEX = re.compile(r'(?:--|—)(\w+)(?::{(.+?)})?')
 
 
 class QuerySettings:
-    SERIALIZED_VALUES = ['server', 'evosort', 'menuselect']
+    SERIALIZED_VALUES = ['server', 'evosort', 'menuselect', 'lsmultiplier', 'cardplus']
     NAMES_TO_ENUMS = {
         'na_prio': EvoToFocus,
         'server': Server,
         'evosort': AltEvoSort,
         'menuselect': ChildMenuSelector,
+        'lsmultiplier': LsMultiplier,
+        'cardplus': CardPlusModifier,
     }
     ENUMS_TO_NAMES = {v: k for k, v in NAMES_TO_ENUMS.items()}
     SETTINGS_TO_ENUMS = {
@@ -25,17 +27,26 @@ class QuerySettings:
         "nadiffs": ChildMenuSelector.NaDiffMenu,
         "awakening": ChildMenuSelector.AwakeningList,
         "awakenings": ChildMenuSelector.AwakeningList,
+        'lsdouble': LsMultiplier.lsdouble,
+        'lssingle': LsMultiplier.lssingle,
+        'plus0': CardPlusModifier.plus0,
+        'plus297': CardPlusModifier.plus297,
     }
 
     def __init__(self,
                  na_prio: EvoToFocus = EvoToFocus.naprio,
                  server: Server = Server.COMBINED,
                  evosort: AltEvoSort = AltEvoSort.dfs,
-                 menuselect: ChildMenuSelector = ChildMenuSelector.IdMenu):
+                 menuselect: ChildMenuSelector = ChildMenuSelector.IdMenu,
+                 lsmultiplier: LsMultiplier = LsMultiplier.lsdouble,
+                 cardplus: CardPlusModifier = CardPlusModifier.plus297
+                 ):
         self.na_prio = na_prio
         self.server = server
         self.evosort = evosort
         self.menuselect = menuselect
+        self.lsmultiplier = lsmultiplier
+        self.cardplus = cardplus
 
     @classmethod
     def extract(cls, fm_flags: Dict[str, Any], query: str) -> "QuerySettings":
