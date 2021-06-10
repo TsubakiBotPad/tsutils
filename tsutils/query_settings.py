@@ -2,18 +2,18 @@ import re
 from enum import Enum
 from typing import Any, Dict
 
-from tsutils.enums import Server, EvoToFocus, AltEvoSort, ChildMenuSelector, LsMultiplier, CardPlusModifier
+from tsutils.enums import Server, EvoToFocus, AltEvoSort, ChildMenuType, LsMultiplier, CardPlusModifier
 
 SETTINGS_REGEX = re.compile(r'(?:--|—)(\w+)(?::{(.+?)})?')
 
 
 class QuerySettings:
-    SERIALIZED_VALUES = ['server', 'evosort', 'menuselect', 'lsmultiplier', 'cardplus']
+    SERIALIZED_VALUES = ['server', 'evosort', 'child_menu_type', 'lsmultiplier', 'cardplus']
     NAMES_TO_ENUMS = {
         'na_prio': EvoToFocus,
         'server': Server,
         'evosort': AltEvoSort,
-        'menuselect': ChildMenuSelector,
+        'child_menu_type': ChildMenuType,
         'lsmultiplier': LsMultiplier,
         'cardplus': CardPlusModifier,
     }
@@ -23,10 +23,10 @@ class QuerySettings:
         "allservers": Server.COMBINED,
         "dfs": AltEvoSort.dfs,
         "numerical": AltEvoSort.numerical,
-        "nadiff": ChildMenuSelector.NaDiffMenu,
-        "nadiffs": ChildMenuSelector.NaDiffMenu,
-        "awakening": ChildMenuSelector.AwakeningList,
-        "awakenings": ChildMenuSelector.AwakeningList,
+        "nadiff": ChildMenuType.NaDiffMenu,
+        "nadiffs": ChildMenuType.NaDiffMenu,
+        "awakening": ChildMenuType.AwakeningList,
+        "awakenings": ChildMenuType.AwakeningList,
         'lsdouble': LsMultiplier.lsdouble,
         'lssingle': LsMultiplier.lssingle,
         'lss': LsMultiplier.lssingle,
@@ -38,14 +38,14 @@ class QuerySettings:
                  na_prio: EvoToFocus = EvoToFocus.naprio,
                  server: Server = Server.COMBINED,
                  evosort: AltEvoSort = AltEvoSort.dfs,
-                 menuselect: ChildMenuSelector = ChildMenuSelector.IdMenu,
+                 child_menu_type: ChildMenuType = ChildMenuType.IdMenu,
                  lsmultiplier: LsMultiplier = LsMultiplier.lsdouble,
                  cardplus: CardPlusModifier = CardPlusModifier.plus297,
                  ):
         self.na_prio = na_prio
         self.server = server
         self.evosort = evosort
-        self.menuselect = menuselect
+        self.child_menu_type = child_menu_type
         self.lsmultiplier = lsmultiplier
         self.cardplus = cardplus
 

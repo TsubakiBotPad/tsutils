@@ -18,7 +18,7 @@ class AltEvoSort(Enum):
     numerical = 1
 
 
-class ChildMenuSelector(Enum):
+class ChildMenuType(Enum):
     IdMenu = 0
     NaDiffMenu = 1
     AwakeningList = 2
