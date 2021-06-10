@@ -39,7 +39,7 @@ class QuerySettings:
                  evosort: AltEvoSort = AltEvoSort.dfs,
                  menuselect: ChildMenuSelector = ChildMenuSelector.IdMenu,
                  lsmultiplier: LsMultiplier = LsMultiplier.lsdouble,
-                 cardplus: CardPlusModifier = CardPlusModifier.plus297
+                 cardplus: CardPlusModifier = CardPlusModifier.plus297,
                  ):
         self.na_prio = na_prio
         self.server = server
