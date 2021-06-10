@@ -29,6 +29,7 @@ class QuerySettings:
         "awakenings": ChildMenuSelector.AwakeningList,
         'lsdouble': LsMultiplier.lsdouble,
         'lssingle': LsMultiplier.lssingle,
+        'lss': LsMultiplier.lssingle,
         'plus0': CardPlusModifier.plus0,
         'plus297': CardPlusModifier.plus297,
     }
