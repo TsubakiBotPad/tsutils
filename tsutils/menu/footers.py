@@ -9,8 +9,13 @@ def embed_footer():
     return EmbedFooter('Requester may click the reactions below to switch tabs')
 
 
-def embed_footer_with_state(state: ViewState, image_url=TSUBAKI_FLOWER_ICON_URL):
+def embed_footer_with_state(state: ViewState, *, image_url=None, text=None):
+    if image_url is None:
+        image_url = TSUBAKI_FLOWER_ICON_URL
+    if text is None:
+        text = 'Requester may click the reactions below to switch tabs'
+
     url = IntraMessageState.serialize(image_url, state.serialize())
     return EmbedFooter(
-        'Requester may click the reactions below to switch tabs',
+        text,
         icon_url=url)
