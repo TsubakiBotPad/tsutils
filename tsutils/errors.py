@@ -1,0 +1,2 @@
+class IndexNotLoaded(KeyError):
+    pass

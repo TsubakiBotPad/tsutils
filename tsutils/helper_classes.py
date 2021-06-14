@@ -2,6 +2,7 @@ import asyncio
 import io
 
 from tsutils.enums import Server
+from tsutils.errors import IndexNotLoaded
 
 
 class aobject(object):
@@ -40,10 +41,6 @@ class DummyObject(dict):
         item.update(kwargs)
         super().__init__(item)
         self.__dict__ = item
-
-
-class IndexNotLoaded(KeyError):
-    pass
 
 
 class IndexDict(dict):
