@@ -1,6 +1,9 @@
 import asyncio
 import io
 
+from tsutils.enums import Server
+from tsutils.errors import IndexNotLoaded
+
 
 class aobject(object):
     """Base class to allow for asynchronous __init__"""
@@ -38,3 +41,13 @@ class DummyObject(dict):
         item.update(kwargs)
         super().__init__(item)
         self.__dict__ = item
+
+
+class IndexDict(dict):
+    def __getattribute__(self, name):
+        try:
+            super().__getattribute__(name)
+        except KeyError:
+            if isinstance(name, Server):
+                raise IndexNotLoaded("Index not yet loaded")
+            raise
