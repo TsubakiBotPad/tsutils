@@ -1,10 +1,13 @@
 import asyncio
 import re
+from typing import Literal, Optional, List
 
 import discord
 
+from .emoji import SendableEmoji, YES_EMOJI, NO_EMOJI
 
-async def send_repeated_consecutive_messages(ctx, message):
+
+async def send_repeated_consecutive_messages(ctx, message: str) -> discord.Message:
     """Edit the last message to include the string `x2` or more if would otherwise be repeated"""
     lmessage = await ctx.history().__anext__()
     fullmatch = re.escape(message) + r"(?: x(\d+))?"
@@ -12,24 +15,27 @@ async def send_repeated_consecutive_messages(ctx, message):
     if match and lmessage.author == ctx.bot.user:
         n = match.group(1) or "1"
         await lmessage.edit(content=message + " x" + str(int(n) + 1))
+        return lmessage
     else:
-        await ctx.send(message)
+        return await ctx.send(message)
 
 
-async def confirm_message(ctx, text, yemoji="✅", nemoji="❌", timeout=10):
+async def get_user_confirmation(ctx, text: str,
+                                yes_emoji: SendableEmoji = YES_EMOJI, no_emoji: SendableEmoji = NO_EMOJI,
+                                timeout: int = 10) -> Literal[True, False, None]:
     msg = await ctx.send(text)
-    asyncio.create_task(msg.add_reaction(yemoji))
-    asyncio.create_task(msg.add_reaction(nemoji))
+    asyncio.create_task(msg.add_reaction(yes_emoji))
+    asyncio.create_task(msg.add_reaction(no_emoji))
 
     def check(reaction, user):
-        return (str(reaction.emoji) in [yemoji, nemoji]
+        return (str(reaction.emoji) in [yes_emoji, no_emoji]
                 and user.id == ctx.author.id
                 and reaction.message.id == msg.id)
 
     ret = False
     try:
         r, u = await ctx.bot.wait_for('reaction_add', check=check, timeout=timeout)
-        if r.emoji == yemoji:
+        if r.emoji == yes_emoji:
             ret = True
     except asyncio.TimeoutError:
         ret = None
@@ -38,7 +44,7 @@ async def confirm_message(ctx, text, yemoji="✅", nemoji="❌", timeout=10):
     return ret
 
 
-async def get_reaction(ctx, text, *emoji, timeout=10):
+async def get_user_reaction(ctx, text: str, *emoji: SendableEmoji, timeout: int = 10) -> Optional[SendableEmoji]:
     msg = await ctx.send(text)
 
     async def addreactions():
@@ -65,7 +71,10 @@ async def get_reaction(ctx, text, *emoji, timeout=10):
     return ret
 
 
-async def await_and_remove(bot, react_msg, listen_user, delete_msgs=None, emoji="❌", timeout=15):
+async def await_and_remove(bot, react_msg: discord.Message, listen_user: discord.User,
+                           delete_msgs: Optional[List[discord.Message]] = None,
+                           emoji: SendableEmoji = NO_EMOJI, timeout: int = 15) -> None:
+    """Remove a message when recieving an emoji reaction"""
     try:
         await react_msg.add_reaction(emoji)
     except Exception as e:
@@ -97,12 +106,13 @@ async def await_and_remove(bot, react_msg, listen_user, delete_msgs=None, emoji=
 
 class StatusManager:
     """An asynchronous context manager to temporary modify the bot's status"""
-    def __init__(self, bot, status=discord.Status.dnd):
+
+    def __init__(self, bot, status: discord.Status = discord.Status.dnd):
         self.bot = bot
         self.newstatus = status
         self.oldstatus = None
 
-    async def __aenter__(self):
+    async def __aenter__(self) -> None:
         if not self.bot.guilds:
             return
         self.oldstatus = self.bot.guilds[0].me.status
