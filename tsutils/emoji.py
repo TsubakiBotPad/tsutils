@@ -1,21 +1,29 @@
 import re
+from typing import Sequence, Union
 
+import discord
 
-def char_to_emoji(c):
+SendableEmoji = Union[str, discord.Emoji]
+ReceivableEmoji = Union[SendableEmoji, discord.PartialEmoji]
+
+YES_EMOJI = '\N{WHITE HEAVY CHECK MARK}'
+NO_EMOJI = '\N{CROSS MARK}'
+
+def char_to_emoji(c: str) -> SendableEmoji:
     """Casts individual characters & the integer 10 as emojis"""
     c = str(c).lower()
     if '0' <= c <= '9':
         names = {
-            '0': '0⃣',
-            '1': '1⃣',
-            '2': '2⃣',
-            '3': '3⃣',
-            '4': '4⃣',
-            '5': '5⃣',
-            '6': '6⃣',
-            '7': '7⃣',
-            '8': '8⃣',
-            '9': '9⃣',
+            '0': '0\N{COMBINING ENCLOSING KEYCAP}',
+            '1': '1\N{COMBINING ENCLOSING KEYCAP}',
+            '2': '2\N{COMBINING ENCLOSING KEYCAP}',
+            '3': '3\N{COMBINING ENCLOSING KEYCAP}',
+            '4': '4\N{COMBINING ENCLOSING KEYCAP}',
+            '5': '5\N{COMBINING ENCLOSING KEYCAP}',
+            '6': '6\N{COMBINING ENCLOSING KEYCAP}',
+            '7': '7\N{COMBINING ENCLOSING KEYCAP}',
+            '8': '8\N{COMBINING ENCLOSING KEYCAP}',
+            '9': '9\N{COMBINING ENCLOSING KEYCAP}',
             '10': '\N{KEYCAP TEN}'
         }
         return names[c]
@@ -27,7 +35,7 @@ def char_to_emoji(c):
     return chr(base + adjustment)
 
 
-def fix_emojis_for_server(emoji_list, msg_text):
+def fix_emojis_for_server(emoji_list: Sequence[discord.Emoji], msg_text: str) -> str:
     """Finds 'emoji-looking' substrings in msg_text and corrects them.
 
     If msg_text has something like '<:emoji_1_derp:13242342343>' and the server
@@ -55,7 +63,7 @@ def fix_emojis_for_server(emoji_list, msg_text):
     return msg_text
 
 
-def replace_emoji_names_with_code(emoji_list, msg_text):
+def replace_emoji_names_with_code(emoji_list: Sequence[discord.Emoji], msg_text: str) -> str:
     """Finds emoji-name substrings in msg_text and corrects them.
 
     If msg_text has something like ':emoji_1_derp:' and emoji_list contains
