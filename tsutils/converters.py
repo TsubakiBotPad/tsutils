@@ -20,8 +20,8 @@ else:
             if len(roles) == 0:
                 raise BadArgument(f"No role matched {argument}")
 
-            highest_prio = min(roles, key=lambda r: r.position)
+            highest_prio = max(roles, key=lambda r: r.position)
             await ctx.send(f"Warning: More than one candidate found: {', '.join(r.mention for r in roles)}"
-                           f" for input {argument}. We matched {highest_prio.mention}.",
+                           f" for input `{argument}`. We matched {highest_prio.mention}.",
                            allowed_mentions=discord.AllowedMentions(everyone=False, roles=False))
             return highest_prio

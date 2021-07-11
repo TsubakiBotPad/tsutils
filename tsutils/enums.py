@@ -18,7 +18,7 @@ class Server(Enum):
         elif argument.upper() in ('KR', 'KO'):
             return Server.KO
         else:
-            raise BadArgument(f"Unable to convert server {argument}")
+            raise BadArgument(f"Unable to convert server `{argument}`")
 
 
 class StarterGroup(Enum):
@@ -31,13 +31,13 @@ class StarterGroup(Enum):
     @classmethod
     async def convert(cls, ctx, argument):
         if 'RED'.startswith(argument.upper()):
-            return Attribute.RED
+            return StarterGroup.RED
         elif 'BLUE'.startswith(argument.upper()):
-            return Attribute.BLUE
+            return StarterGroup.BLUE
         elif 'GREEN'.startswith(argument.upper()):
-            return Attribute.GREEN
+            return StarterGroup.GREEN
         else:
-            raise BadArgument(f"Unable to convert group {argument}")
+            raise BadArgument(f"Unable to convert group `{argument}`")
 
 
 class EvoToFocus(Enum):
