@@ -116,3 +116,19 @@ class StatusManager:
             return
         activity = self.bot.guilds[0].me.activity
         await self.bot.change_presence(activity=activity, status=self.oldstatus)
+
+
+def confirmation_message(msg: str) -> str:
+    return f"{YES_EMOJI} {msg}"
+
+
+async def send_confirmation_message(ctx, msg: str) -> discord.Message:
+    return await ctx.send(confirmation_message(msg))
+
+
+def cancellation_message(msg: str) -> str:
+    return f"{NO_EMOJI} {msg}"
+
+
+async def send_cancellation_message(ctx, msg: str) -> discord.Message:
+    return await ctx.send(cancellation_message(msg))
