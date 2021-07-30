@@ -2,6 +2,8 @@ from redbot.core import commands
 
 from .helper_functions import make_non_gatekeeping_check
 
+CLOUDFRONT_URL = "https://d30r6ivozz8w2a.cloudfront.net"
+
 
 def auth_check(perm, default=False):
     def check(ctx):
