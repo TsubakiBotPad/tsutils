@@ -19,7 +19,7 @@ setuptools.setup(
         "backoff",
         "discord",
         "discord-menu",
-        "pytz"
+        "pytz",
         "Red-DiscordBot",
     ],
     classifiers=[
