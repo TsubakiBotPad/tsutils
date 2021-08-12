@@ -6,7 +6,8 @@ class IndexNotLoaded(KeyError):
 
 
 class ClientInlineTextException(UserFeedbackCheckFailure):  # TODO: Find another way to do this
-    """An error that sends its message to the user instead of failing a command
+    """An error that sends its message to the user in the Discord client instead of
+    failing a command and printing a message to the terminal/logger
 
     This error has nothing to do with checks, and only inherits from UserFeedbackCheckFailure
     because the Red bot instance automatically sends its message to the current
