@@ -8,7 +8,14 @@ class IndexNotLoaded(KeyError):
 class NoAPIKeyException(CommandError):
     def __init__(self, fix_command=None, *args):
         if fix_command is not None:
-            m = f"API keys not found.  Use `{fix_command}` to set them."
-            super().__init__(m, *args)
+            super().__init__(f"API key not found.  Set it with `{fix_command}`", *args)
+        else:
+            super().__init__(None, *args)
+
+
+class BadAPIKeyException(ClientInlineTextException):
+    def __init__(self, fix_command=None, *args):
+        if fix_command is not None:
+            super().__init__(f"Invalid API key.  Fix it with `{fix_command}`", *args)
         else:
             super().__init__(None, *args)
