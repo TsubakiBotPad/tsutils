@@ -16,7 +16,7 @@ class Server(Enum):
         elif argument.upper() in ('NA', 'EN', 'US'):
             return Server.NA
         elif argument.upper() in ('KR', 'KO'):
-            return Server.KO
+            return Server.KR
         else:
             raise BadArgument(f"Unable to convert server `{argument}`")
 
@@ -25,8 +25,6 @@ class StarterGroup(Enum):
     RED = 0
     BLUE = 1
     GREEN = 2
-    LIGHT = 3
-    DARK = 4
 
     @classmethod
     async def convert(cls, ctx, argument):
