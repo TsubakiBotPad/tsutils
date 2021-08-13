@@ -2,13 +2,13 @@ import re
 from enum import Enum
 from typing import Any, Dict
 
-from tsutils.enums import Server, EvoToFocus, AltEvoSort, ChildMenuType, LsMultiplier, CardPlusModifier
+from tsutils.enums import AltEvoSort, CardPlusModifier, ChildMenuType, EvoGrouping, EvoToFocus, LsMultiplier, Server
 
 SETTINGS_REGEX = re.compile(r'(?:--|—)(\w+)(?::{(.+?)})?')
 
 
 class QuerySettings:
-    SERIALIZED_VALUES = ['server', 'evosort', 'child_menu_type', 'lsmultiplier', 'cardplus']
+    SERIALIZED_VALUES = ['server', 'evosort', 'child_menu_type', 'lsmultiplier', 'cardplus', 'evogrouping']
     NAMES_TO_ENUMS = {
         'na_prio': EvoToFocus,
         'server': Server,
@@ -16,6 +16,7 @@ class QuerySettings:
         'child_menu_type': ChildMenuType,
         'lsmultiplier': LsMultiplier,
         'cardplus': CardPlusModifier,
+        'evogrouping': EvoGrouping,
     }
     ENUMS_TO_NAMES = {v: k for k, v in NAMES_TO_ENUMS.items()}
     SETTINGS_TO_ENUMS = {
@@ -32,6 +33,8 @@ class QuerySettings:
         'lss': LsMultiplier.lssingle,
         'plus0': CardPlusModifier.plus0,
         'plus297': CardPlusModifier.plus297,
+        'splitevos': EvoGrouping.splitevos,
+        'groupevos': EvoGrouping.groupevos,
     }
 
     def __init__(self,
@@ -41,6 +44,7 @@ class QuerySettings:
                  child_menu_type: ChildMenuType = ChildMenuType.IdMenu,
                  lsmultiplier: LsMultiplier = LsMultiplier.lsdouble,
                  cardplus: CardPlusModifier = CardPlusModifier.plus297,
+                 evogrouping: EvoGrouping = EvoGrouping.splitevos,
                  ):
         self.na_prio = na_prio
         self.server = server
@@ -48,6 +52,7 @@ class QuerySettings:
         self.child_menu_type = child_menu_type
         self.lsmultiplier = lsmultiplier
         self.cardplus = cardplus
+        self.evogrouping = evogrouping
 
     @classmethod
     def extract(cls, fm_flags: Dict[str, Any], query: str) -> "QuerySettings":
