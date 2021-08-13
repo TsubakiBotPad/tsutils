@@ -42,6 +42,11 @@ class DummyObject(dict):
         super().__init__(item)
         self.__dict__ = item
 
+    def __getattr__(self, name):
+        if name in self.__dict__:
+            return self.__dict__[name]
+        raise AttributeError(f"'{self.__class__.__name__}' object has no attribute '{name}'")
+
 
 class IndexDict(dict):
     def __getattribute__(self, name):
