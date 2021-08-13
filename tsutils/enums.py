@@ -64,3 +64,8 @@ class LsMultiplier(Enum):
 class CardPlusModifier(Enum):
     plus0 = 0
     plus297 = 1
+
+
+class EvoGrouping(Enum):
+    splitevos = 0
+    groupevos = 1
