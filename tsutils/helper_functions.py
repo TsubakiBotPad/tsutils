@@ -47,7 +47,7 @@ def fawait(coro, loop):
 async def repeating_timer(seconds, condition=None, start_immediately=True):
     if condition is None:
         def condition():
-            return None
+            return True
     if start_immediately:
         yield
     while condition():
