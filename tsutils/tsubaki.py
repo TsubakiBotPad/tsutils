@@ -37,7 +37,7 @@ is_donor = make_non_gatekeeping_check(
 )
 
 
-def get_user_preference(bot: Red, user: User, pref: str) -> Optional[Any]:
+async def get_user_preference(bot: Red, user: User, pref: str) -> Optional[Any]:
     cog: Any = bot.get_cog("UserPreferences")
     if not cog:
         return None
