@@ -8,7 +8,7 @@ from redbot.core.commands import Command
 from .helper_classes import CogABCMeta
 
 
-class PreferenceMixin(metaclass=CogABCMeta):
+class CogMixin(metaclass=CogABCMeta):
     @abstractmethod
     def setup(self) -> None: ...
 
