@@ -2,8 +2,7 @@ from abc import abstractmethod
 from typing import Callable, List, Optional, Type
 
 import redbot.core.commands as commands
-from discord.ext.commands import Cog
-from redbot.core.commands import Command
+from redbot.core.commands import Cog, Command
 
 from .helper_classes import CogABCMeta
 

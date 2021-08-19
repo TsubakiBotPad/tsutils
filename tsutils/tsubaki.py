@@ -1,4 +1,8 @@
+from typing import Any, Optional
+
+from discord import User
 from redbot.core import commands
+from redbot.core.bot import Red
 
 from .helper_functions import make_non_gatekeeping_check
 
@@ -31,3 +35,10 @@ is_donor = make_non_gatekeeping_check(
     ("Sorry, but this is a Donor Only command.  Learn "
      "more about donation via `{0.prefix}donate`")
 )
+
+
+def get_user_preference(bot: Red, user: User, pref: str) -> Optional[Any]:
+    cog: Any = bot.get_cog("UserPreferences")
+    if not cog:
+        return None
+    return await cog.config.user(user).get_raw(pref)
