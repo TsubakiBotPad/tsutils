@@ -23,19 +23,19 @@ class CogMixin(metaclass=CogABCMeta):
         for mixin in mixins:
             super(mixin, self).setup()  # noqa
 
-    def get_mixin_user_data(self: Cog, user_id: int) -> List[str]:
+    async def get_mixin_user_data(self: Cog, user_id: int) -> List[str]:
         ret = []
         mixins = [class_ for class_ in self.__class__.__mro__ if issubclass(class_, CogMixin)]
         for mixin in mixins:
-            if (text := super(mixin, self).red_get_data_for_user(user_id=user_id)):  # noqa
+            if (text := await super(mixin, self).red_get_data_for_user(user_id=user_id)):  # noqa
                 ret.append(text)
         return ret
 
-    def delete_mixin_user_data(self: Cog, requester: str, user_id: int) -> None:
+    async def delete_mixin_user_data(self: Cog, requester: str, user_id: int) -> None:
         ret = []
         mixins = [class_ for class_ in self.__class__.__mro__ if issubclass(class_, CogMixin)]
         for mixin in mixins:
-            super(mixin, self).red_delete_data_for_user(requester=requester, user_id=user_id)  # noqa
+            await super(mixin, self).red_delete_data_for_user(requester=requester, user_id=user_id)  # noqa
 
 
 class MixinCommand:
