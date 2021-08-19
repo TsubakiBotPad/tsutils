@@ -1,21 +1,8 @@
-from abc import abstractmethod
-from typing import Any, Callable, Dict, Optional
-
-from redbot.core.commands import Command
+from typing import Callable, Optional
 
 import redbot.core.commands as commands
-
-from  import CogABCMeta
-
-
-class PreferenceMixin(metaclass=CogABCMeta):
-    CONFIG_DEFAULTS: Dict[str, Any]
-
-    @abstractmethod
-    async def get_mixin_data(self, user_id: int) -> str: ...
-
-    @abstractmethod
-    async def delete_mixin_data(self, requester: str, user_id: int) -> str: ...
+from discord.ext.commands import Cog
+from redbot.core.commands import Command
 
 
 class MixinCommand:
@@ -24,7 +11,7 @@ class MixinCommand:
         self.parent = parent
         self.kwargs = kwargs
 
-    def setup(self, cog: PreferenceMixin, parent=None) -> None:
+    def setup(self, cog: Cog, parent: Optional[Command] = None) -> None:
         parent = parent or self.parent or commands
         if isinstance(parent, str):
             parent = getattr(cog, parent)
@@ -55,7 +42,7 @@ class MixinGroup:
 
         return _decorator
 
-    def setup(self, cog: PreferenceMixin, parent=None) -> None:
+    def setup(self, cog: Cog, parent: Optional[Command] = None) -> None:
         parent = parent or self.parent or commands
         if isinstance(parent, str):
             parent = getattr(cog, parent)
@@ -65,7 +52,7 @@ class MixinGroup:
             child.setup(cog, group)
 
 
-def add_command_to_cog(command: Command, cog: PreferenceMixin) -> None:
+def add_command_to_cog(command: Command, cog: Cog) -> None:
     command.cog = cog
     cog.__cog_commands__ = (*cog.__cog_commands__, command)
     setattr(cog, command.callback.__name__, command)
@@ -79,14 +66,14 @@ def add_command_to_cog(command: Command, cog: PreferenceMixin) -> None:
         parent.add_command(command)
 
 
-def mixin_command(parent, **kwargs) -> Callable[[Callable], MixinCommand]:
+def mixin_command(parent: Optional[str], **kwargs) -> Callable[[Callable], MixinCommand]:
     def _decorator(func: Callable) -> MixinCommand:
         return MixinCommand(func, parent, **kwargs)
 
     return _decorator
 
 
-def mixin_group(parent, **kwargs) -> Callable[[Callable], MixinGroup]:
+def mixin_group(parent: Optional[str], **kwargs) -> Callable[[Callable], MixinGroup]:
     def _decorator(func: Callable) -> MixinGroup:
         return MixinGroup(func, parent, **kwargs)
 
