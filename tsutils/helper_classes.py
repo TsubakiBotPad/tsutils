@@ -26,7 +26,7 @@ class aobject(object):
 
 
 class CogABCMeta(ABCMeta, CogMeta):
-    pass
+    """A metaclass that implements ABCMeta and CogMeta"""
 
 
 class CtxIO(io.IOBase):
