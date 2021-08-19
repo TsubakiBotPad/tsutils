@@ -38,7 +38,10 @@ is_donor = make_non_gatekeeping_check(
 
 
 async def get_user_preference(bot: Red, user: User, pref: str) -> Optional[Any]:
+    if pref in ('timezone',):
+        raise ValueError("Invalid preference.  Use the cog method to get this.")
+
     cog: Any = bot.get_cog("UserPreferences")
-    if not cog:
+    if cog is None:
         return None
     return await cog.config.user(user).get_raw(pref)
