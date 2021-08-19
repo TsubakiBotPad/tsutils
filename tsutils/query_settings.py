@@ -2,7 +2,7 @@ import re
 from enum import Enum
 from typing import Any, Dict
 
-from tsutils.enums import AltEvoSort, CardPlusModifier, ChildMenuType, EvoGrouping, EvoToFocus, LsMultiplier, Server
+from .enums import AltEvoSort, CardPlusModifier, ChildMenuType, EvoGrouping, EvoToFocus, LsMultiplier, Server
 
 SETTINGS_REGEX = re.compile(r'(?:--|—)(\w+)(?::{(.+?)})?')
 

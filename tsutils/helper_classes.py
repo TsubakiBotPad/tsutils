@@ -1,8 +1,11 @@
 import asyncio
 import io
+from abc import ABCMeta
 
-from tsutils.enums import Server
-from tsutils.errors import IndexNotLoaded
+from discord.ext.commands import CogMeta
+
+from .enums import Server
+from .errors import IndexNotLoaded
 
 
 class aobject(object):
@@ -20,6 +23,10 @@ class aobject(object):
 
     __new__ = __anew__
     __init__ = __ainit__
+
+
+class CogABCMeta(ABCMeta, CogMeta):
+    pass
 
 
 class CtxIO(io.IOBase):
