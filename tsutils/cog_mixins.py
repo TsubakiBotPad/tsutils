@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Callable, List, Optional, Union
+from typing import Callable, List, Optional, Type
 
 import redbot.core.commands as commands
 from discord.ext.commands import Cog
@@ -8,35 +8,36 @@ from redbot.core.commands import Command
 from .helper_classes import CogABCMeta
 
 
-class CogMixin(metaclass=CogABCMeta):
+class CogMixin(Cog, metaclass=CogABCMeta):
     @abstractmethod
-    async def red_get_data_for_user(self: "CogMixin", *, user_id: int) -> Optional[str]: ...
+    def setup_self(self: "CogMixin") -> None: ...
 
     @abstractmethod
-    async def red_delete_data_for_user(self: "CogMixin", *, requester: str, user_id: int) -> None: ...
-    
-    def setup_self(self: "CogMixin"):
-        for command in (attr for attr in self.__dict__.values() if isinstance(attr, (MixinCommand, MixinGroup))):
-            command.setup(self)  # noqa
-    
-    def setup_mixins(self: Cog) -> None:
-        mixins = [class_ for class_ in self.__class__.__mro__ if issubclass(class_, CogMixin)]
-        for mixin in mixins:
+    async def red_get_data_for_user(self: "CogMixin", *, user_id: int) -> Optional[str]:
+        ...
+
+    @abstractmethod
+    async def red_delete_data_for_user(self: "CogMixin", *, requester: str, user_id: int) -> None:
+        ...
+
+    def setup_mixins(self) -> None:
+        for mixin in self.active_mixins:
             super(mixin, self).setup_self()  # noqa
 
-    async def get_mixin_user_data(self: Cog, user_id: int) -> List[str]:
+    async def get_mixin_user_data(self, user_id: int) -> List[str]:
         ret = []
-        mixins = [class_ for class_ in self.__class__.__mro__ if issubclass(class_, CogMixin)]
-        for mixin in mixins:
+        for mixin in self.active_mixins:
             if (text := await super(mixin, self).red_get_data_for_user(user_id=user_id)):  # noqa
                 ret.append(text)
         return ret
 
-    async def delete_mixin_user_data(self: Cog, requester: str, user_id: int) -> None:
-        ret = []
-        mixins = [class_ for class_ in self.__class__.__mro__ if issubclass(class_, CogMixin)]
-        for mixin in mixins:
+    async def delete_mixin_user_data(self, requester: str, user_id: int) -> None:
+        for mixin in self.active_mixins:
             await super(mixin, self).red_delete_data_for_user(requester=requester, user_id=user_id)  # noqa
+
+    @property
+    def active_mixins(self) -> List[Type["CogMixin"]]:
+        return [class_ for class_ in self.__class__.__mro__ if issubclass(class_, CogMixin) and class_ != CogMixin]
 
 
 class MixinCommand:
