@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Callable, List, Optional
+from typing import Callable, List, Optional, Union
 
 import redbot.core.commands as commands
 from discord.ext.commands import Cog
@@ -10,18 +10,19 @@ from .helper_classes import CogABCMeta
 
 class CogMixin(metaclass=CogABCMeta):
     @abstractmethod
-    def setup(self) -> None: ...
+    async def red_get_data_for_user(self: "CogMixin", *, user_id: int) -> Optional[str]: ...
 
     @abstractmethod
-    async def red_get_data_for_user(self, *, user_id: int) -> Optional[str]: ...
-
-    @abstractmethod
-    async def red_delete_data_for_user(self, *, requester: str, user_id: int) -> None: ...
-
+    async def red_delete_data_for_user(self: "CogMixin", *, requester: str, user_id: int) -> None: ...
+    
+    def setup_self(self: "CogMixin"):
+        for command in (attr for attr in self.__dict__.values() if isinstance(attr, (MixinCommand, MixinGroup))):
+            command.setup(self)  # noqa
+    
     def setup_mixins(self: Cog) -> None:
         mixins = [class_ for class_ in self.__class__.__mro__ if issubclass(class_, CogMixin)]
         for mixin in mixins:
-            super(mixin, self).setup()  # noqa
+            super(mixin, self).setup_self()  # noqa
 
     async def get_mixin_user_data(self: Cog, user_id: int) -> List[str]:
         ret = []
