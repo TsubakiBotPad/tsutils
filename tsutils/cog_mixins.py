@@ -1,8 +1,22 @@
+from abc import abstractmethod
 from typing import Callable, Optional
 
 import redbot.core.commands as commands
 from discord.ext.commands import Cog
 from redbot.core.commands import Command
+
+from .helper_classes import CogABCMeta
+
+
+class PreferenceMixin(metaclass=CogABCMeta):
+    @abstractmethod
+    def setup(self) -> None: ...
+
+    @abstractmethod
+    async def get_mixin_data(self, user_id: int) -> Optional[str]: ...
+
+    @abstractmethod
+    async def delete_mixin_data(self, requester: str, user_id: int) -> None: ...
 
 
 class MixinCommand:
