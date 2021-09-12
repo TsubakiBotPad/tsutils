@@ -57,7 +57,7 @@ class QuerySettings:
                  lsmultiplier: LsMultiplier = LsMultiplier.lsdouble,
                  cardplus: CardPlusModifier = CardPlusModifier.plus297,
                  evogrouping: EvoGrouping = EvoGrouping.splitevos,
-                 cardmode: CardModeModifier = CardPlusModifier.solo,
+                 cardmode: CardModeModifier = CardModeModifier.solo,
                  cardlevel: CardLevelModifier = CardLevelModifier.lvmax,
                  ):
         self.na_prio = na_prio
