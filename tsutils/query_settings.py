@@ -2,13 +2,15 @@ import re
 from enum import Enum
 from typing import Any, Dict
 
-from .enums import AltEvoSort, CardPlusModifier, ChildMenuType, EvoGrouping, EvoToFocus, LsMultiplier, Server
+from tsutils.enums import Server, EvoToFocus, AltEvoSort, ChildMenuType, LsMultiplier, CardPlusModifier, \
+    EvoGrouping, CardModeModifier, CardLevelModifier
 
 SETTINGS_REGEX = re.compile(r'(?:--|—)(\w+)(?::{(.+?)})?')
 
 
 class QuerySettings:
-    SERIALIZED_VALUES = ['server', 'evosort', 'child_menu_type', 'lsmultiplier', 'cardplus', 'evogrouping']
+    SERIALIZED_VALUES = ['server', 'evosort', 'child_menu_type', 'lsmultiplier', 'cardplus', 'evogrouping',
+                         'cardmode', 'cardlevel']
     NAMES_TO_ENUMS = {
         'na_prio': EvoToFocus,
         'server': Server,
@@ -17,6 +19,8 @@ class QuerySettings:
         'lsmultiplier': LsMultiplier,
         'cardplus': CardPlusModifier,
         'evogrouping': EvoGrouping,
+        'cardmode': CardModeModifier,
+        'cardlevel': CardLevelModifier,
     }
     ENUMS_TO_NAMES = {v: k for k, v in NAMES_TO_ENUMS.items()}
     SETTINGS_TO_ENUMS = {
@@ -35,6 +39,11 @@ class QuerySettings:
         'plus297': CardPlusModifier.plus297,
         'splitevos': EvoGrouping.splitevos,
         'groupevos': EvoGrouping.groupevos,
+        'solo': CardModeModifier.solo,
+        'coop': CardModeModifier.coop,
+        'lvmax': CardLevelModifier.lvmax,
+        'lv110': CardLevelModifier.lv110,
+        'lv120': CardLevelModifier.lv120,
     }
 
     def __init__(self,
@@ -45,6 +54,8 @@ class QuerySettings:
                  lsmultiplier: LsMultiplier = LsMultiplier.lsdouble,
                  cardplus: CardPlusModifier = CardPlusModifier.plus297,
                  evogrouping: EvoGrouping = EvoGrouping.splitevos,
+                 cardmode: CardModeModifier = CardPlusModifier.solo,
+                 cardlevel: CardLevelModifier = CardLevelModifier.lvmax,
                  ):
         self.na_prio = na_prio
         self.server = server
@@ -53,6 +64,8 @@ class QuerySettings:
         self.lsmultiplier = lsmultiplier
         self.cardplus = cardplus
         self.evogrouping = evogrouping
+        self.cardmode = cardmode
+        self.cardlevel = cardlevel
 
     @classmethod
     def extract(cls, fm_flags: Dict[str, Any], query: str) -> "QuerySettings":

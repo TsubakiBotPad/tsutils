@@ -67,3 +67,14 @@ class CardPlusModifier(Enum):
 class EvoGrouping(Enum):
     splitevos = 0
     groupevos = 1
+
+
+class CardModeModifier(Enum):
+    solo = 0
+    coop = 1
+
+
+class CardLevelModifier(Enum):
+    lvmax = 0
+    lv110 = 1
+    lv120 = 2
