@@ -1,12 +1,5 @@
 import pytz
 
-# TZ used for PAD NA
-# NA_TZ_OBJ = pytz.timezone('America/Los_Angeles')
-NA_TZ_OBJ = pytz.timezone('US/Pacific')
-
-# TZ used for PAD JP
-JP_TZ_OBJ = pytz.timezone('Asia/Tokyo')
-
 # This was overwritten by voltron. PDX opted to copy it +10,000 ids away
 CROWS_1 = {x: x + 10000 for x in range(2601, 2635 + 1)}
 # This isn't overwritten but PDX adjusted anyway
