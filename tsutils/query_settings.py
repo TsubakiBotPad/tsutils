@@ -45,6 +45,9 @@ class QuerySettings:
         'lv110': CardLevelModifier.lv110,
         'lv120': CardLevelModifier.lv120,
     }
+    SETTINGS_WITH_DATA_NAMES = [
+        'level',
+    ]
 
     def __init__(self,
                  na_prio: EvoToFocus = EvoToFocus.naprio,
@@ -75,12 +78,12 @@ class QuerySettings:
                 fm_flags[key] = QuerySettings.NAMES_TO_ENUMS[key](value)  # noqa
 
         for setting, data in re.findall(SETTINGS_REGEX, query.lower()):
-            if setting not in cls.SETTINGS_TO_ENUMS:
-                continue
-            value = cls.SETTINGS_TO_ENUMS[setting]
-            key = cls.ENUMS_TO_NAMES[type(value)]
-            fm_flags[key] = value
-
+            if setting in cls.SETTINGS_TO_ENUMS:
+                value = cls.SETTINGS_TO_ENUMS[setting]
+                key = cls.ENUMS_TO_NAMES[type(value)]
+                fm_flags[key] = value
+            elif setting in cls.SETTINGS_WITH_DATA_NAMES:
+                fm_flags[setting] = data
         return QuerySettings(**fm_flags)
 
     def serialize(self: "QuerySettings") -> Dict[str, Any]:
