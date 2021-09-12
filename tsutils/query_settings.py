@@ -45,7 +45,7 @@ class QuerySettings:
         'lv110': CardLevelModifier.lv110,
         'lv120': CardLevelModifier.lv120,
     }
-    VALUE_ENUM_NAMES = [
+    SETTINGS_WITH_DATA_NAMES = [
         'level',
     ]
 
@@ -82,7 +82,7 @@ class QuerySettings:
                 value = cls.SETTINGS_TO_ENUMS[setting]
                 key = cls.ENUMS_TO_NAMES[type(value)]
                 fm_flags[key] = value
-            elif setting in cls.VALUE_ENUM_NAMES:
+            elif setting in cls.SETTINGS_WITH_DATA_NAMES:
                 fm_flags[setting] = data
         return QuerySettings(**fm_flags)
 
