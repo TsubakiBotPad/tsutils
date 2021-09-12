@@ -45,9 +45,7 @@ class QuerySettings:
         'lv110': CardLevelModifier.lv110,
         'lv120': CardLevelModifier.lv120,
     }
-    SETTINGS_WITH_DATA_NAMES = [
-        'level',
-    ]
+    SETTINGS_WITH_DATA_NAMES = []
 
     def __init__(self,
                  na_prio: EvoToFocus = EvoToFocus.naprio,
