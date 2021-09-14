@@ -11,7 +11,7 @@ class Server(Enum):
 
     @classmethod
     async def convert(cls, ctx, argument):
-        if argument.upper() == ('JP', 'JA'):
+        if argument.upper() in ('JP', 'JA'):
             return Server.JP
         elif argument.upper() in ('NA', 'EN', 'US'):
             return Server.NA
