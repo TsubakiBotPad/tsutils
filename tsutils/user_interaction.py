@@ -1,10 +1,11 @@
 import asyncio
 import re
-from typing import Literal, Optional, List
+from typing import List, Literal, Optional
 
 import discord
+from tsutils.cogs.userpreferences import get_user_preference
 
-from .emoji import SendableEmoji, YES_EMOJI, NO_EMOJI
+from .emoji import NO_EMOJI, SendableEmoji, YES_EMOJI
 
 
 async def send_repeated_consecutive_messages(ctx, message: str) -> discord.Message:
@@ -22,7 +23,7 @@ async def send_repeated_consecutive_messages(ctx, message: str) -> discord.Messa
 
 async def get_user_confirmation(ctx, text: str,
                                 yes_emoji: SendableEmoji = YES_EMOJI, no_emoji: SendableEmoji = NO_EMOJI,
-                                timeout: int = 10) -> Literal[True, False, None]:
+                                timeout: int = 10, force_delete: bool = None) -> Literal[True, False, None]:
     msg = await ctx.send(text)
     asyncio.create_task(msg.add_reaction(yes_emoji))
     asyncio.create_task(msg.add_reaction(no_emoji))
@@ -40,11 +41,14 @@ async def get_user_confirmation(ctx, text: str,
     except asyncio.TimeoutError:
         ret = None
 
-    await msg.delete()
+    if force_delete is not False and (force_delete is True
+                                      or await get_user_preference(ctx.bot, ctx.author, 'delete_confirmation', True)):
+        await msg.delete()
     return ret
 
 
-async def get_user_reaction(ctx, text: str, *emoji: SendableEmoji, timeout: int = 10) -> Optional[SendableEmoji]:
+async def get_user_reaction(ctx, text: str, *emoji: SendableEmoji, timeout: int = 10,
+                            force_delete: bool = None) -> Optional[SendableEmoji]:
     msg = await ctx.send(text)
 
     async def addreactions():
@@ -67,7 +71,9 @@ async def get_user_reaction(ctx, text: str, *emoji: SendableEmoji, timeout: int 
     except asyncio.TimeoutError:
         ret = None
 
-    await msg.delete()
+    if force_delete is not False and (force_delete is True
+                                      or await get_user_preference(ctx.bot, ctx.author, 'delete_confirmation', True)):
+        await msg.delete()
     return ret
 
 
