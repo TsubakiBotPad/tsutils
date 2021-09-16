@@ -44,6 +44,11 @@ async def get_user_confirmation(ctx, text: str,
     if force_delete is not False and (force_delete is True
                                       or await get_user_preference(ctx.bot, ctx.author, 'delete_confirmation', True)):
         await msg.delete()
+    else:
+        if ret is True:
+            await msg.remove_reaction(no_emoji, ctx.me)
+        elif ret is False:
+            await msg.remove_reaction(yes_emoji, ctx.me)
     return ret
 
 
