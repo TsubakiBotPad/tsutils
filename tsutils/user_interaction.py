@@ -43,12 +43,21 @@ async def get_user_confirmation(ctx, text: str,
 
     if force_delete is not False and (force_delete is True
                                       or await get_user_preference(ctx.bot, ctx.author, 'delete_confirmation', True)):
-        await msg.delete()
-    else:
+        try:
+            await msg.delete()
+        except discord.Forbidden:
+            pass
+
         if ret is True:
-            await msg.remove_reaction(no_emoji, ctx.me)
+            await ctx.react_quietly(yes_emoji)
         elif ret is False:
+            await ctx.react_quietly(no_emoji)
+    else:
+        if ret is not True:
             await msg.remove_reaction(yes_emoji, ctx.me)
+        if ret is not False:
+            await msg.remove_reaction(no_emoji, ctx.me)
+
     return ret
 
 
@@ -78,7 +87,17 @@ async def get_user_reaction(ctx, text: str, *emoji: SendableEmoji, timeout: int 
 
     if force_delete is not False and (force_delete is True
                                       or await get_user_preference(ctx.bot, ctx.author, 'delete_confirmation', True)):
-        await msg.delete()
+        try:
+            await msg.delete()
+        except discord.Forbidden:
+            pass
+
+        if ret is not None:
+            await ctx.react_quietly(ret)
+    else:
+        for e in emoji:
+            if e != ret:
+                msg.remove_reaction(r.emoji, ctx.me)
     return ret
 
 
