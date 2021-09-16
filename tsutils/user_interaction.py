@@ -64,7 +64,7 @@ async def get_user_confirmation(ctx, text: str,
 
 
 async def get_user_reaction(ctx, text: str, *emoji: SendableEmoji, timeout: int = 10,
-                            force_delete: bool = None) -> Optional[SendableEmoji]:
+                            force_delete: bool = None, show_feedback: bool = False) -> Optional[SendableEmoji]:
     msg = await ctx.send(text)
 
     async def addreactions():
@@ -94,12 +94,12 @@ async def get_user_reaction(ctx, text: str, *emoji: SendableEmoji, timeout: int 
         except discord.Forbidden:
             pass
 
-        if ret is not None:
+        if ret is not None and show_feedback:
             await ctx.react_quietly(ret)
     else:
         for e in emoji:
             if e != ret:
-                msg.remove_reaction(r.emoji, ctx.me)
+                msg.remove_reaction(e, ctx.me)
     return ret
 
 
