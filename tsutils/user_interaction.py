@@ -23,7 +23,8 @@ async def send_repeated_consecutive_messages(ctx, message: str) -> discord.Messa
 
 async def get_user_confirmation(ctx, text: str,
                                 yes_emoji: SendableEmoji = YES_EMOJI, no_emoji: SendableEmoji = NO_EMOJI,
-                                timeout: int = 10, force_delete: bool = None) -> Literal[True, False, None]:
+                                timeout: int = 10, force_delete: bool = None, show_feedback: bool = False) \
+        -> Literal[True, False, None]:
     msg = await ctx.send(text)
     asyncio.create_task(msg.add_reaction(yes_emoji))
     asyncio.create_task(msg.add_reaction(no_emoji))
@@ -48,10 +49,11 @@ async def get_user_confirmation(ctx, text: str,
         except discord.Forbidden:
             pass
 
-        if ret is True:
-            await ctx.react_quietly(yes_emoji)
-        elif ret is False:
-            await ctx.react_quietly(no_emoji)
+        if show_feedback:
+            if ret is True:
+                await ctx.react_quietly(yes_emoji)
+            elif ret is False:
+                await ctx.react_quietly(no_emoji)
     else:
         if ret is not True:
             await msg.remove_reaction(yes_emoji, ctx.me)
