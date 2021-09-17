@@ -4,7 +4,7 @@ from discord import User
 from redbot.core.bot import Red
 
 
-async def get_user_preference(bot: Red, user: User, pref: str, unloaded_default=None) -> Optional[Any]:
+async def get_user_preference(bot: Red, user: User, pref: str, *, unloaded_default=None) -> Optional[Any]:
     """Gets a user's preference from UserPreferences cog"""
     if pref in ('timezone',):
         raise ValueError("Invalid preference.  Use the cog method to get this.")
