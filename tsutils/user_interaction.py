@@ -67,7 +67,8 @@ async def get_user_confirmation(ctx, text: str,
 
 
 async def get_user_reaction(ctx, text: str, *emoji: SendableEmoji, timeout: int = 10,
-                            force_delete: bool = None, show_feedback: bool = False) -> Optional[SendableEmoji]:
+                            force_delete: Optional[bool] = None, show_feedback: bool = False) \
+        -> Optional[SendableEmoji]:
     msg = await ctx.send(text)
 
     async def addreactions():
