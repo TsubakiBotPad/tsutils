@@ -1,10 +1,11 @@
 import asyncio
 import re
-from typing import Literal, Optional, List
+from typing import List, Literal, Optional
 
 import discord
+from tsutils.cogs.userpreferences import get_user_preference
 
-from .emoji import SendableEmoji, YES_EMOJI, NO_EMOJI
+from .emoji import NO_EMOJI, SendableEmoji, YES_EMOJI
 
 
 async def send_repeated_consecutive_messages(ctx, message: str) -> discord.Message:
@@ -22,7 +23,8 @@ async def send_repeated_consecutive_messages(ctx, message: str) -> discord.Messa
 
 async def get_user_confirmation(ctx, text: str,
                                 yes_emoji: SendableEmoji = YES_EMOJI, no_emoji: SendableEmoji = NO_EMOJI,
-                                timeout: int = 10) -> Literal[True, False, None]:
+                                timeout: int = 10, force_delete: Optional[bool] = None, show_feedback: bool = False) \
+        -> Literal[True, False, None]:
     msg = await ctx.send(text)
     asyncio.create_task(msg.add_reaction(yes_emoji))
     asyncio.create_task(msg.add_reaction(no_emoji))
@@ -40,11 +42,33 @@ async def get_user_confirmation(ctx, text: str,
     except asyncio.TimeoutError:
         ret = None
 
-    await msg.delete()
+    do_delete = force_delete
+    if do_delete is None:
+        do_delete = await get_user_preference(ctx.bot, ctx.author, 'delete_confirmation', unloaded_default=True)
+
+    if do_delete:
+        try:
+            await msg.delete()
+        except discord.Forbidden:
+            pass
+
+        if show_feedback:
+            if ret is True:
+                await ctx.react_quietly(yes_emoji)
+            elif ret is False:
+                await ctx.react_quietly(no_emoji)
+    else:
+        if ret is not True:
+            await msg.remove_reaction(yes_emoji, ctx.me)
+        if ret is not False:
+            await msg.remove_reaction(no_emoji, ctx.me)
+
     return ret
 
 
-async def get_user_reaction(ctx, text: str, *emoji: SendableEmoji, timeout: int = 10) -> Optional[SendableEmoji]:
+async def get_user_reaction(ctx, text: str, *emoji: SendableEmoji, timeout: int = 10,
+                            force_delete: Optional[bool] = None, show_feedback: bool = False) \
+        -> Optional[SendableEmoji]:
     msg = await ctx.send(text)
 
     async def addreactions():
@@ -67,7 +91,22 @@ async def get_user_reaction(ctx, text: str, *emoji: SendableEmoji, timeout: int 
     except asyncio.TimeoutError:
         ret = None
 
-    await msg.delete()
+    do_delete = force_delete
+
+    if do_delete is None:
+        do_delete = await get_user_preference(ctx.bot, ctx.author, 'delete_confirmation', unloaded_default=True)
+    if do_delete:
+        try:
+            await msg.delete()
+        except discord.Forbidden:
+            pass
+
+        if ret is not None and show_feedback:
+            await ctx.react_quietly(ret)
+    else:
+        for e in emoji:
+            if e != ret:
+                msg.remove_reaction(e, ctx.me)
     return ret
 
 
