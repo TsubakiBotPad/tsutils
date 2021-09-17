@@ -42,8 +42,11 @@ async def get_user_confirmation(ctx, text: str,
     except asyncio.TimeoutError:
         ret = None
 
-    if force_delete is not False and (force_delete is True
-                                      or await get_user_preference(ctx.bot, ctx.author, 'delete_confirmation', True)):
+    do_delete = force_delete
+    if do_delete is None:
+        do_delete = await get_user_preference(ctx.bot, ctx.author, 'delete_confirmation', True)
+
+    if do_delete:
         try:
             await msg.delete()
         except discord.Forbidden:
@@ -87,8 +90,11 @@ async def get_user_reaction(ctx, text: str, *emoji: SendableEmoji, timeout: int 
     except asyncio.TimeoutError:
         ret = None
 
-    if force_delete is not False and (force_delete is True
-                                      or await get_user_preference(ctx.bot, ctx.author, 'delete_confirmation', True)):
+    do_delete = force_delete
+
+    if do_delete is None:
+        do_delete = await get_user_preference(ctx.bot, ctx.author, 'delete_confirmation', True)
+    if do_delete:
         try:
             await msg.delete()
         except discord.Forbidden:
