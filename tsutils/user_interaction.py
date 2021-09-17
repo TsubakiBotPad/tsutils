@@ -23,7 +23,7 @@ async def send_repeated_consecutive_messages(ctx, message: str) -> discord.Messa
 
 async def get_user_confirmation(ctx, text: str,
                                 yes_emoji: SendableEmoji = YES_EMOJI, no_emoji: SendableEmoji = NO_EMOJI,
-                                timeout: int = 10, force_delete: bool = None, show_feedback: bool = False) \
+                                timeout: int = 10, force_delete: Optional[bool] = None, show_feedback: bool = False) \
         -> Literal[True, False, None]:
     msg = await ctx.send(text)
     asyncio.create_task(msg.add_reaction(yes_emoji))
@@ -44,7 +44,7 @@ async def get_user_confirmation(ctx, text: str,
 
     do_delete = force_delete
     if do_delete is None:
-        do_delete = await get_user_preference(ctx.bot, ctx.author, 'delete_confirmation', True)
+        do_delete = await get_user_preference(ctx.bot, ctx.author, 'delete_confirmation', unloaded_default=True)
 
     if do_delete:
         try:
@@ -94,7 +94,7 @@ async def get_user_reaction(ctx, text: str, *emoji: SendableEmoji, timeout: int 
     do_delete = force_delete
 
     if do_delete is None:
-        do_delete = await get_user_preference(ctx.bot, ctx.author, 'delete_confirmation', True)
+        do_delete = await get_user_preference(ctx.bot, ctx.author, 'delete_confirmation', unloaded_default=True)
     if do_delete:
         try:
             await msg.delete()
