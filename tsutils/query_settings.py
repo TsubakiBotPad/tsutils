@@ -54,7 +54,7 @@ class QuerySettings:
                  child_menu_type: ChildMenuType = ChildMenuType.IdMenu,
                  lsmultiplier: LsMultiplier = LsMultiplier.lsdouble,
                  cardplus: CardPlusModifier = CardPlusModifier.plus297,
-                 evogrouping: EvoGrouping = EvoGrouping.splitevos,
+                 evogrouping: EvoGrouping = EvoGrouping.groupevos,
                  cardmode: CardModeModifier = CardModeModifier.solo,
                  cardlevel: CardLevelModifier = CardLevelModifier.lvmax,
                  ):
