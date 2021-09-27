@@ -47,13 +47,14 @@ def corowrap(coro, loop):
     return func
 
 
-async def conditional_iterator(condition: Callable[[], Coroutine[None, None, bool]],
+async def conditional_iterator(condition: Callable[[], Coroutine[None, None, Optional[Any]]],
                                poll_interval: int = 0) \
-        -> AsyncGenerator[None]:
+        -> AsyncGenerator[Any]:
     """An async generator that only yields when the condition is True"""
     while True:
-        if await condition():
-            yield
+        value = await condition()
+        if value is not None and value is not False:
+            yield value
         await asyncio.sleep(poll_interval)
 
 
