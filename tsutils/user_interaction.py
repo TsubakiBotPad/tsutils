@@ -71,14 +71,23 @@ async def get_user_reaction(ctx, text: str, *emoji: SendableEmoji, timeout: int 
         -> Optional[SendableEmoji]:
     msg = await ctx.send(text)
 
-    async def addreactions():
-        for e in emoji:
-            try:
-                asyncio.create_task(msg.add_reaction(e))
-            except (discord.Forbidden, discord.NotFound):
-                pass
+    added_emoji = []
+    adding_emoji = asyncio.Lock()
 
-    asyncio.create_task(addreactions())
+    async def addreactions():
+        async def add_single(single_emoji):
+            async with adding_emoji:
+                nonlocal added_emoji
+                try:
+                    await msg.add_reaction(single_emoji)
+                    added_emoji.append(single_emoji)
+                except (discord.Forbidden, discord.NotFound):
+                    pass
+
+        for em in emoji:
+            await asyncio.shield(add_single(em))
+
+    task = asyncio.create_task(addreactions())
 
     def check(reaction, user):
         return (str(reaction.emoji) in emoji
@@ -90,23 +99,20 @@ async def get_user_reaction(ctx, text: str, *emoji: SendableEmoji, timeout: int 
         ret = r.emoji
     except asyncio.TimeoutError:
         ret = None
+    task.cancel()
+    await adding_emoji.acquire()
 
     do_delete = force_delete
-
     if do_delete is None:
         do_delete = await get_user_preference(ctx.bot, ctx.author, 'delete_confirmation', unloaded_default=True)
     if do_delete:
-        try:
-            await msg.delete()
-        except discord.Forbidden:
-            pass
-
+        await msg.delete()
         if ret is not None and show_feedback:
             await ctx.react_quietly(ret)
     else:
-        for e in emoji:
+        for e in added_emoji:
             if e != ret:
-                msg.remove_reaction(e, ctx.me)
+                await msg.remove_reaction(e, ctx.me)
     return ret
 
 
