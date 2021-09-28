@@ -4,7 +4,7 @@ import errno
 import os
 import signal
 from functools import wraps
-from typing import Any, AsyncGenerator, Callable, Coroutine, Iterable, Mapping, Optional
+from typing import Any, AsyncGenerator, Callable, Coroutine, Iterable, Mapping, Optional, TypeVar
 
 Decorator = Callable[[Callable], Callable]
 DecoratorFunction = Callable[..., Decorator]
