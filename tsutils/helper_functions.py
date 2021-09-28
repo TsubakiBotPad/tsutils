@@ -1,21 +1,22 @@
 import asyncio
+import discord.ext
 import errno
 import os
 import signal
-from collections import Callable
 from functools import wraps
-from typing import Any, AsyncGenerator, Coroutine, Iterable, Mapping, Optional
-
-import discord.ext
+from typing import Any, AsyncGenerator, Callable, Coroutine, Iterable, Mapping, Optional
 
 Decorator = Callable[[Callable], Callable]
 DecoratorFunction = Callable[..., Decorator]
+
+R = TypeVar("R")
 
 
 def timeout_after(seconds: int = 10,
                   error_message: str = os.strerror(errno.ETIME)) \
         -> Decorator:
     """A decorator to give a timeout to a synchronous function"""
+
     def decorator(func):
         def _handle_timeout(signum, frame):
             raise TimeoutError(error_message)
@@ -36,6 +37,7 @@ def timeout_after(seconds: int = 10,
 
 def corowrap(coro, loop):
     """Turns a Coroutine into a fake synchronous function for some reason???"""
+
     # TODO: Remove this.  Oh god, why would I write this???
     def func(*args, **kwargs):
         fut = asyncio.run_coroutine_threadsafe(coro, loop)
@@ -47,10 +49,10 @@ def corowrap(coro, loop):
     return func
 
 
-async def conditional_iterator(condition: Callable[[], Coroutine[None, None, Optional[Any]]],
+async def conditional_iterator(condition: Callable[[], Coroutine[None, None, Optional[R]]],
                                poll_interval: int = 0) \
-        -> AsyncGenerator[Any]:
-    """An async generator that only yields when the condition is True"""
+        -> AsyncGenerator[R]:
+    """An async generator that only yields when the condition is not None or False"""
     while True:
         value = await condition()
         if value is not None and value is not False:
