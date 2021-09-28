@@ -51,7 +51,7 @@ def corowrap(coro, loop):
 
 async def conditional_iterator(condition: Callable[[], Coroutine[None, None, Optional[R]]],
                                poll_interval: int = 0) \
-        -> AsyncGenerator[R]:
+        -> AsyncGenerator[R, None]:
     """An async generator that only yields when the condition is not None or False"""
     while True:
         value = await condition()
@@ -63,7 +63,7 @@ async def conditional_iterator(condition: Callable[[], Coroutine[None, None, Opt
 async def repeating_timer(seconds: int,
                           condition: Optional[Callable[[], bool]] = None,
                           start_immediately: bool = True) \
-        -> AsyncGenerator[None]:
+        -> AsyncGenerator[None, None]:
     """Yields every N seconds"""
     if condition is None:
         def condition():
