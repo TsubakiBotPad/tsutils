@@ -1,5 +1,5 @@
 import re
-from datetime import datetime, timedelta, timezone, tzinfo
+from datetime import datetime, time, timedelta, timezone, tzinfo
 from typing import Optional
 
 import pytz
@@ -8,6 +8,10 @@ DISCORD_DEFAULT_TZ = pytz.timezone('US/Pacific')
 JP_TIMEZONE = pytz.timezone('Japan')
 NA_TIMEZONE = timezone(timedelta(hours=-8))
 KR_TIMEZONE = pytz.timezone('Asia/Seoul')
+
+DAY_CHANGE = time(0)
+ROLLOVER = time(4)
+
 
 def tzstr_to_timezone(self, tzstr: str) -> Optional[tzinfo]:
     tzstr = tzstr.upper().strip()
@@ -38,3 +42,17 @@ def tzstr_to_timezone(self, tzstr: str) -> Optional[tzinfo]:
     for tz in pytz.all_timezones:
         if tzstr in tz.upper():
             return pytz.timezone(tz)
+
+
+def get_last_time(time_when: time) -> datetime:
+    dt = datetime.combine(datetime.now().date(), time_when)
+    if datetime.now() < dt:
+        dt -= timedelta(days=1)
+    return dt
+
+
+def get_next_time(time_when: time) -> datetime:
+    dt = datetime.combine(datetime.now().date(), time_when)
+    if datetime.now() > dt:
+        dt += timedelta(days=1)
+    return dt
