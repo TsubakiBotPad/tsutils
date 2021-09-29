@@ -44,15 +44,15 @@ def tzstr_to_timezone(self, tzstr: str) -> Optional[tzinfo]:
             return pytz.timezone(tz)
 
 
-def get_last_time(time_when: time) -> datetime:
-    dt = datetime.combine(datetime.now().date(), time_when)
-    if datetime.now() < dt:
+def get_last_time(time_when: time, tz: Optional[tzinfo] = None) -> datetime:
+    dt = datetime.combine(datetime.now(tz).date(), time_when, tz)
+    if datetime.now(tz) < dt:
         dt -= timedelta(days=1)
     return dt
 
 
-def get_next_time(time_when: time) -> datetime:
-    dt = datetime.combine(datetime.now().date(), time_when)
-    if datetime.now() > dt:
+def get_next_time(time_when: time, tz: Optional[tzinfo] = None) -> datetime:
+    dt = datetime.combine(datetime.now(tz).date(), time_when, tz)
+    if datetime.now(tz) > dt:
         dt += timedelta(days=1)
     return dt
