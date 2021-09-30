@@ -9,6 +9,10 @@ JP_TIMEZONE = pytz.timezone('Japan')
 NA_TIMEZONE = timezone(timedelta(hours=-8))
 KR_TIMEZONE = pytz.timezone('Asia/Seoul')
 
+DAY_CHANGE = time(0)
+NEW_DAY = time(4)
+
+
 def tzstr_to_timezone(self, tzstr: str) -> Optional[tzinfo]:
     tzstr = tzstr.upper().strip()
     if tzstr in ('EST', 'EDT', 'ET'):
