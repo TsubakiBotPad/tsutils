@@ -25,7 +25,7 @@ def tzstr_to_timezone(self, tzstr: str) -> Optional[tzinfo]:
         return pytz.timezone('America/Chicago')
     if tzstr in ('JP', 'JST', 'JT'):
         return JP_TIMEZONE
-    if tzstr in ('NA', 'US'):
+    if tzstr in ('NA',):
         return NA_TIMEZONE
     if tzstr in ('KR',):
         return KR_TIMEZONE
