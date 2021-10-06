@@ -56,7 +56,7 @@ class QuerySettings:
                  cardplus: CardPlusModifier = CardPlusModifier.plus297,
                  evogrouping: EvoGrouping = EvoGrouping.groupevos,
                  cardmode: CardModeModifier = CardModeModifier.solo,
-                 cardlevel: CardLevelModifier = CardLevelModifier.lvmax,
+                 cardlevel: CardLevelModifier = CardLevelModifier.lv110,
                  ):
         self.na_prio = na_prio
         self.server = server
