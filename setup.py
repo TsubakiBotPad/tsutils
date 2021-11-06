@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="tsutils",
-    version="5.2.2",
+    version="5.3.0",
     author="The Tsubotki Team",
     author_email="69992611+TsubakiBotPad@users.noreply.github.com",
     license="MIT",
@@ -15,12 +15,12 @@ setuptools.setup(
     url="https://github.com/TsubakiBotPad/tsutils",
     packages=setuptools.find_packages(),
     install_requires=[
-        "aiohttp",
-        "backoff",
-        "discord",
-        "discord-menu",
-        "pytz",
-        "Red-DiscordBot",
+        "aiohttp>=3.7.4",
+        "backoff>=1.10.0",
+        "discord.py>=1.7.3",
+        "discord_menu>=0.16.13",
+        "pytz>=2021.1",
+        "Red-DiscordBot>=3.4.14",
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
