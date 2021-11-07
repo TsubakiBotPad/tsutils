@@ -15,11 +15,8 @@ setuptools.setup(
     url="https://github.com/TsubakiBotPad/tsutils",
     packages=setuptools.find_packages(),
     install_requires=[
-        "aiohttp>=3.7.4",
-        "backoff>=1.10.0",
-        "discord.py>=1.7.3",
+        "backoff==1.10.0",
         "discord_menu>=0.16.13",
-        "pytz>=2021.1",
         "Red-DiscordBot>=3.4.14",
     ],
     classifiers=[
