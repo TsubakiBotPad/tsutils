@@ -4,14 +4,14 @@ from discordmenu.embed.menu import EmbedMenu
 from tsutils.menu.components.panes import MenuPanes
 
 
-class ClosableEmbedMenu:
+class ClosableEmbedMenuBase:
     MENU_TYPE = 'ClosableEmbedMenu'
     message = None
     view_types = {}
 
-    @staticmethod
-    def menu():
-        embed = EmbedMenu({}, ClosableEmbedMenu.message_control)
+    @classmethod
+    def menu(cls):
+        embed = EmbedMenu({}, cls.message_control)
         return embed
 
     @classmethod
