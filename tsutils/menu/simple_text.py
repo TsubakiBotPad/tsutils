@@ -5,7 +5,7 @@ from discordmenu.embed.control import EmbedControl
 from discordmenu.embed.menu import EmbedMenu
 
 from tsutils.menu.components.panes import MenuPanes, emoji_buttons
-from padinfo.view.simple_text import SimpleTextView, SimpleTextViewState
+from tsutils.menu.view.simple_text import SimpleTextView, SimpleTextViewState
 
 
 class SimpleTextNames:

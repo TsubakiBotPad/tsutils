@@ -2,19 +2,19 @@ from typing import List
 
 from discordmenu.embed.components import EmbedMain
 from discordmenu.embed.view import EmbedView
-from discordmenu.embed.view_state import ViewState
-
-from tsutils.menu.components.footers import embed_footer_with_state
 
 from tsutils.menu.components.config import UserConfig
+from tsutils.menu.components.footers import embed_footer_with_state
+from tsutils.menu.view.view_state_base import ViewStateBase
 
 
-class SimpleTextViewState(ViewState):
+class SimpleTextViewState(ViewStateBase):
     def __init__(self, original_author_id, menu_type, raw_query,
                  color, message,
+                 reaction_list: List[str] = None,
                  extra_state=None):
         super().__init__(original_author_id, menu_type, raw_query,
-                         extra_state=extra_state)
+                         reaction_list=reaction_list, extra_state=extra_state)
         self.message = message
         self.color = color
 
@@ -31,7 +31,7 @@ class SimpleTextViewState(ViewState):
         menu_type = ims['menu_type']
         raw_query = ims.get('raw_query')
         return cls(original_author_id, menu_type, raw_query, user_config.color, ims.get('message'),
-                   extra_state=ims)
+                   reaction_list=ims.get('reaction_list'), extra_state=ims)
 
 
 class SimpleTextView:
