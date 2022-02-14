@@ -1,5 +1,6 @@
 import asyncio
 import io
+import logging
 from abc import ABCMeta
 
 from discord.ext.commands import CogMeta
@@ -25,14 +26,27 @@ class aobject(object):
     __init__ = __ainit__
 
 
+class DuplicateFilter(logging.Filter):
+    def __init__(self):
+        super().__init__()
+        self.last_log = None
+
+    def filter(self, record):
+        current_log = (record.module, record.levelno, record.msg)
+        if current_log != self.last_log:
+            self.last_log = current_log
+            return True
+        return False
+
+
 class CogABCMeta(ABCMeta, CogMeta):
     """A metaclass that implements ABCMeta and CogMeta"""
 
 
 class CtxIO(io.IOBase):
     def __init__(self, ctx):
+        super().__init__()
         self.ctx = ctx
-        super(CtxIO, self).__init__()
 
     def read(self):
         raise io.UnsupportedOperation("read")
