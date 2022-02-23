@@ -1,8 +1,11 @@
 import urllib.parse
+from typing import Optional
 
 from discordmenu.emoji.emoji_cache import emoji_cache
 
+from tsutils.enums import MonsterLinkTarget
 from tsutils.pad import get_pdx_id
+from tsutils.query_settings import QuerySettings
 
 CLOUDFRONT_URL = "https://d30r6ivozz8w2a.cloudfront.net"
 MEDIA_PATH = CLOUDFRONT_URL + '/media/'
@@ -74,3 +77,11 @@ class MonsterLink:
     @staticmethod
     def padindex(m):
         return PADINDEX_TEMPLATE.format(m.monster_no_jp)
+
+    @staticmethod
+    def header_link(m, query_settings: Optional[QuerySettings] = None):
+        if not m.on_na:
+            return MonsterLink.padindex(m)
+        if query_settings is None:
+            return MonsterLink.padindex(m)
+        return MonsterLink.padindex(m) if query_settings.linktarget == MonsterLinkTarget.padindex else MonsterLink.ilmina(m)
