@@ -78,3 +78,8 @@ class CardLevelModifier(Enum):
     lvmax = 0
     lv110 = 1
     lv120 = 2
+
+
+class MonsterLinkTarget(Enum):
+    padindex = 0
+    ilmina = 1
