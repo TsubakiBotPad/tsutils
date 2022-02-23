@@ -17,7 +17,7 @@ INFO_PDX_TEMPLATE = 'http://www.puzzledragonx.com/en/monster.asp?n={}'
 YT_SEARCH_TEMPLATE = 'https://www.youtube.com/results?search_query={}'
 SKYOZORA_TEMPLATE = 'http://pad.skyozora.com/pets/{}'
 ILMINA_TEMPLATE = 'https://ilmina.com/#/CARD/{}'
-PADINDEX_TEMPLATE = 'https://pad.chesterip.cc/'
+PADINDEX_TEMPLATE = 'https://pad.chesterip.cc/{}'
 
 
 def number_emoji_small(num: int):
