@@ -29,7 +29,7 @@ class MonsterHeader:
         return Text('{}{} {}'.strip().format(
             get_attribute_emoji_by_monster(m) if use_emoji else '',
             '\N{EARTH GLOBE AMERICAS}' if m.server_priority == Server.NA else '',
-            cls._long_maybe_tsubaki(m, is_tsubaki, bool(is_jp_buffed))))
+            cls._maybe_tsubaki(m, is_tsubaki=is_tsubaki, is_jp_buffed=bool(is_jp_buffed))))
 
     @classmethod
     def text_with_emoji(cls, m, link=True, prefix=None,
@@ -56,13 +56,11 @@ class MonsterHeader:
         return suffix
 
     @classmethod
-    def _long_maybe_tsubaki(cls, m, is_tsubaki, is_jp_buffed=False):
-        """Returns long_v2 as well as an `!` if the monster is Tsubaki
+    def _maybe_tsubaki(cls, m, is_tsubaki, is_jp_buffed=False):
+        """Returns the monster name as well as an `!` if the monster is Tsubaki
 
         To celebrate 1000 issues/PRs in our main Tsubaki repo, we added this easter egg! Yay!
         """
-        return '[{}] {}{}{}'.format(
-            m.monster_no_na,
-            m.name_en,
-            '!' if is_tsubaki else '',
-            cls._jp_suffix(m, is_jp_buffed))
+        tsubaki_punctuation = '!' if is_tsubaki else ''
+        suffix = cls._jp_suffix(m, is_jp_buffed)
+        return f'[{m.monster_no_na}] {m.name_en}{tsubaki_punctuation}{suffix}'
