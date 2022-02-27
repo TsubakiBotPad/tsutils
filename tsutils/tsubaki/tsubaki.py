@@ -84,4 +84,5 @@ class MonsterLink:
             return MonsterLink.padindex(m)
         if query_settings is None:
             return MonsterLink.padindex(m)
-        return MonsterLink.padindex(m) if query_settings.linktarget == MonsterLinkTarget.padindex else MonsterLink.ilmina(m)
+        return MonsterLink.padindex(
+            m) if query_settings.linktarget == MonsterLinkTarget.padindex else MonsterLink.ilmina(m)
