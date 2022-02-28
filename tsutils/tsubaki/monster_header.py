@@ -5,26 +5,28 @@ from discordmenu.embed.text import LinkedText, Text
 
 from tsutils.enums import Server
 from tsutils.query_settings import QuerySettings
-from tsutils.tsubaki.emoji_map import get_attribute_emoji_by_monster
-from tsutils.tsubaki.tsubaki import MonsterLink
+from tsutils.tsubaki.custom_emoji import get_attribute_emoji_by_monster
+from tsutils.tsubaki.links import MonsterLink
 
 
 class MonsterHeader:
     @classmethod
-    def linked_box(cls, m, show_jp=False, query_settings: Optional[QuerySettings] = None):
-        return cls.box(m, link=True, show_jp=show_jp, query_settings=query_settings)
+    def linked_text(cls, m, *, show_jp=False, is_jp_buffed: bool = False,
+                    query_settings: Optional[QuerySettings] = None):
+        return cls.text(m, link=True, show_jp=show_jp, is_jp_buffed=is_jp_buffed,
+                        query_settings=query_settings)
 
     @classmethod
-    def box(cls, m, link=False, show_jp=False,
-            query_settings: Optional[QuerySettings] = None):
+    def text(cls, m, *, link=False, show_jp=False, is_jp_buffed: bool = False,
+             query_settings: Optional[QuerySettings] = None):
         msg = '[{}] {}{}'.format(
             m.monster_no_na,
             m.name_en,
-            cls._jp_suffix(m) if show_jp else '')
+            cls._jp_suffix(m, is_jp_buffed=is_jp_buffed) if show_jp else '')
         return LinkedText(msg, MonsterLink.header_link(m, query_settings=query_settings)) if link else Text(msg)
 
     @classmethod
-    def header_plaintext(cls, m, is_tsubaki=False, is_jp_buffed=False,
+    def header_plaintext(cls, m, *, is_tsubaki=False, is_jp_buffed=False,
                          use_emoji=False):
         return Text('{}{} {}'.strip().format(
             get_attribute_emoji_by_monster(m) if use_emoji else '',

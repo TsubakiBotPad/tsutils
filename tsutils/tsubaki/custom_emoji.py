@@ -131,3 +131,7 @@ def get_emoji(name):
     if isinstance(name, int):
         name = AWAKENING_ID_TO_EMOJI_NAME_MAP[name]
     return emoji_cache.get_emoji(name)
+
+
+def number_emoji_small(num: int):
+    return emoji_cache.get_emoji(f"bullet_{num}")
