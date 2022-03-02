@@ -59,7 +59,8 @@ class QuerySettings:
                  evogrouping: EvoGrouping = EvoGrouping.groupevos,
                  cardmode: CardModeModifier = CardModeModifier.solo,
                  cardlevel: CardLevelModifier = CardLevelModifier.lv110,
-                 color: str = "000000"
+
+                 color: str = "0"
                  ):
         self.na_prio = na_prio
         self.server = server
