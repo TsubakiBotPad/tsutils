@@ -11,31 +11,16 @@ from tsutils.tsubaki.links import MonsterLink
 
 class MonsterHeader:
     @classmethod
-    def linked_text(cls, m, *, show_jp=False, is_jp_buffed: bool = False,
-                    query_settings: Optional[QuerySettings] = None):
-        return cls.text(m, link=True, show_jp=show_jp, is_jp_buffed=is_jp_buffed,
-                        query_settings=query_settings)
-
-    @classmethod
-    def text(cls, m, *, link=False, show_jp=False, is_jp_buffed: bool = False,
-             query_settings: Optional[QuerySettings] = None):
-        msg = '[{}] {}{}'.format(
-            m.monster_no_na,
-            m.name_en,
-            cls._jp_suffix(m, is_jp_buffed=is_jp_buffed) if show_jp else '')
-        return LinkedText(msg, MonsterLink.header_link(m, query_settings=query_settings)) if link else Text(msg)
-
-    @classmethod
-    def header_plaintext(cls, m, *, is_tsubaki=False, is_jp_buffed=False,
-                         use_emoji=False):
+    def menu_title(cls, m, *, is_tsubaki=False, is_jp_buffed=False,
+                   use_emoji=False):
         return Text('{}{} {}'.strip().format(
             get_attribute_emoji_by_monster(m) if use_emoji else '',
             '\N{EARTH GLOBE AMERICAS}' if m.server_priority == Server.NA else '',
             cls._maybe_tsubaki(m, is_tsubaki=is_tsubaki, is_jp_buffed=bool(is_jp_buffed))))
 
     @classmethod
-    def text_with_emoji(cls, m, link=True, prefix=None,
-                        query_settings: Optional[QuerySettings] = None):
+    def box_with_emoji(cls, m, *, link=True, prefix=None,
+                       query_settings: Optional[QuerySettings] = None):
         msg = f"{m.monster_no_na} - {m.name_en}"
         suffix = cls._jp_suffix(m, False, False)
         return Box(
@@ -45,6 +30,12 @@ class MonsterHeader:
             Text(suffix) if suffix else None,
             delimiter=' '
         )
+
+    @classmethod
+    def text_with_emoji(cls, m, *, prefix=None,
+                        query_settings: Optional[QuerySettings] = None):
+        return cls.box_with_emoji(m, link=False, prefix=prefix,
+                                  query_settings=query_settings).to_markdown()
 
     @classmethod
     def _jp_suffix(cls, m, is_jp_buffed=False, subname_on_override=True):
