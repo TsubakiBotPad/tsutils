@@ -10,7 +10,7 @@ SETTINGS_REGEX = re.compile(r'(?:--|—)(\w+)(?::{(.+?)})?')
 
 class QuerySettings:
     SERIALIZED_VALUES = ['server', 'evosort', 'child_menu_type', 'lsmultiplier', 'cardplus', 'evogrouping',
-                         'cardmode', 'cardlevel']
+                         'cardmode', 'cardlevel', 'color']
     NAMES_TO_ENUMS = {
         'na_prio': EvoToFocus,
         'server': Server,
@@ -45,9 +45,11 @@ class QuerySettings:
         'lv110': CardLevelModifier.lv110,
         'lv120': CardLevelModifier.lv120,
     }
-    SETTINGS_WITH_DATA_NAMES = []
+    SETTINGS_WITH_DATA_NAMES = [
+        'color',
+    ]
 
-    def __init__(self,
+    def __init__(self, *,
                  na_prio: EvoToFocus = EvoToFocus.naprio,
                  server: Server = Server.COMBINED,
                  evosort: AltEvoSort = AltEvoSort.dfs,
@@ -57,6 +59,7 @@ class QuerySettings:
                  evogrouping: EvoGrouping = EvoGrouping.groupevos,
                  cardmode: CardModeModifier = CardModeModifier.solo,
                  cardlevel: CardLevelModifier = CardLevelModifier.lv110,
+                 color: str = "000000"
                  ):
         self.na_prio = na_prio
         self.server = server
@@ -67,6 +70,8 @@ class QuerySettings:
         self.evogrouping = evogrouping
         self.cardmode = cardmode
         self.cardlevel = cardlevel
+
+        self.color = color
 
     @classmethod
     def extract(cls, fm_flags: Dict[str, Any], query: str) -> "QuerySettings":
