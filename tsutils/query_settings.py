@@ -3,14 +3,14 @@ from enum import Enum
 from typing import Any, Dict
 
 from tsutils.enums import Server, EvoToFocus, AltEvoSort, ChildMenuType, LsMultiplier, CardPlusModifier, \
-    EvoGrouping, CardModeModifier, CardLevelModifier
+    EvoGrouping, CardModeModifier, CardLevelModifier, MonsterLinkTarget
 
 SETTINGS_REGEX = re.compile(r'(?:--|—)(\w+)(?::{(.+?)})?')
 
 
 class QuerySettings:
     SERIALIZED_VALUES = ['server', 'evosort', 'child_menu_type', 'lsmultiplier', 'cardplus', 'evogrouping',
-                         'cardmode', 'cardlevel', 'color']
+                         'cardmode', 'cardlevel', 'linktarget', 'color']
     NAMES_TO_ENUMS = {
         'na_prio': EvoToFocus,
         'server': Server,
@@ -21,6 +21,7 @@ class QuerySettings:
         'evogrouping': EvoGrouping,
         'cardmode': CardModeModifier,
         'cardlevel': CardLevelModifier,
+        'linktarget': MonsterLinkTarget,
     }
     ENUMS_TO_NAMES = {v: k for k, v in NAMES_TO_ENUMS.items()}
     SETTINGS_TO_ENUMS = {
@@ -44,6 +45,9 @@ class QuerySettings:
         'lvmax': CardLevelModifier.lvmax,
         'lv110': CardLevelModifier.lv110,
         'lv120': CardLevelModifier.lv120,
+        'ilmina': MonsterLinkTarget.ilmina,
+        'padindex': MonsterLinkTarget.padindex,
+        'chesterip': MonsterLinkTarget.padindex,
     }
     SETTINGS_WITH_DATA_NAMES = [
         'color',
@@ -59,8 +63,9 @@ class QuerySettings:
                  evogrouping: EvoGrouping = EvoGrouping.groupevos,
                  cardmode: CardModeModifier = CardModeModifier.solo,
                  cardlevel: CardLevelModifier = CardLevelModifier.lv110,
+                 linktarget: MonsterLinkTarget = MonsterLinkTarget.padindex,
 
-                 color: str = "0"
+                 color: str = "0",
                  ):
         self.na_prio = na_prio
         self.server = server
@@ -71,6 +76,7 @@ class QuerySettings:
         self.evogrouping = evogrouping
         self.cardmode = cardmode
         self.cardlevel = cardlevel
+        self.linktarget = linktarget
 
         self.color = color
 
