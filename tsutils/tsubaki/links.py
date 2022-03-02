@@ -1,8 +1,6 @@
 import urllib.parse
 from typing import Optional
 
-from discordmenu.emoji.emoji_cache import emoji_cache
-
 from tsutils.enums import MonsterLinkTarget
 from tsutils.pad import get_pdx_id
 from tsutils.query_settings import QuerySettings
@@ -21,10 +19,6 @@ YT_SEARCH_TEMPLATE = 'https://www.youtube.com/results?search_query={}'
 SKYOZORA_TEMPLATE = 'http://pad.skyozora.com/pets/{}'
 ILMINA_TEMPLATE = 'https://ilmina.com/#/CARD/{}'
 PADINDEX_TEMPLATE = 'https://pad.chesterip.cc/{}'
-
-
-def number_emoji_small(num: int):
-    return emoji_cache.get_emoji(f"bullet_{num}")
 
 
 class MonsterImage:
@@ -84,4 +78,5 @@ class MonsterLink:
             return MonsterLink.padindex(m)
         if query_settings is None:
             return MonsterLink.padindex(m)
-        return MonsterLink.padindex(m) if query_settings.linktarget == MonsterLinkTarget.padindex else MonsterLink.ilmina(m)
+        return MonsterLink.padindex(
+            m) if query_settings.linktarget == MonsterLinkTarget.padindex else MonsterLink.ilmina(m)
