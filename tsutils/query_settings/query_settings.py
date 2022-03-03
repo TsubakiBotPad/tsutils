@@ -2,8 +2,9 @@ import re
 from enum import Enum
 from typing import Any, Dict
 
-from tsutils.enums import Server, EvoToFocus, AltEvoSort, ChildMenuType, LsMultiplier, CardPlusModifier, \
+from .enums import Index, EvoToFocus, AltEvoSort, ChildMenuType, LsMultiplier, CardPlusModifier, \
     EvoGrouping, CardModeModifier, CardLevelModifier, MonsterLinkTarget
+from tsutils.query_settings.validators import Color, InvalidArgument
 
 SETTINGS_REGEX = re.compile(r'(?:--|—)(\w+)(?::{(.+?)})?')
 
@@ -13,7 +14,7 @@ class QuerySettings:
                          'cardmode', 'cardlevel', 'linktarget', 'color']
     NAMES_TO_ENUMS = {
         'na_prio': EvoToFocus,
-        'server': Server,
+        'server': Index,
         'evosort': AltEvoSort,
         'child_menu_type': ChildMenuType,
         'lsmultiplier': LsMultiplier,
@@ -25,8 +26,9 @@ class QuerySettings:
     }
     ENUMS_TO_NAMES = {v: k for k, v in NAMES_TO_ENUMS.items()}
     SETTINGS_TO_ENUMS = {
-        "na": Server.NA,
-        "allservers": Server.COMBINED,
+        "na": Index.NA,
+        "allservers": Index.COMBINED,
+        "allindexes": Index.COMBINED,
         "dfs": AltEvoSort.dfs,
         "numerical": AltEvoSort.numerical,
         "nadiff": ChildMenuType.NaDiffMenu,
@@ -49,13 +51,13 @@ class QuerySettings:
         'padindex': MonsterLinkTarget.padindex,
         'chesterip': MonsterLinkTarget.padindex,
     }
-    SETTINGS_WITH_DATA_NAMES = [
-        'color',
-    ]
+    SETTINGS_TO_CONVERTERS = {
+        'color': Color,
+    }
 
     def __init__(self, *,
                  na_prio: EvoToFocus = EvoToFocus.naprio,
-                 server: Server = Server.COMBINED,
+                 server: Index = Index.COMBINED,
                  evosort: AltEvoSort = AltEvoSort.dfs,
                  child_menu_type: ChildMenuType = ChildMenuType.IdMenu,
                  lsmultiplier: LsMultiplier = LsMultiplier.lsdouble,
@@ -92,8 +94,11 @@ class QuerySettings:
                 value = cls.SETTINGS_TO_ENUMS[setting]
                 key = cls.ENUMS_TO_NAMES[type(value)]
                 fm_flags[key] = value
-            elif setting in cls.SETTINGS_WITH_DATA_NAMES:
-                fm_flags[setting] = data
+            elif setting in cls.SETTINGS_TO_CONVERTERS:
+                try:
+                    fm_flags[setting] = cls.SETTINGS_TO_CONVERTERS[setting](data)  # noqa
+                except InvalidArgument:
+                    pass
         return QuerySettings(**fm_flags)
 
     def serialize(self: "QuerySettings") -> Dict[str, Any]:

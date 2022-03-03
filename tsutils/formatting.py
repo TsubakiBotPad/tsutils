@@ -13,6 +13,8 @@ import unicodedata
 # 2605-2606 : Stars
 # 2190-2195 : Arrows
 # u203B     : Weird asterisk thing
+from typing import Optional
+
 import discord
 
 JA_REGEX_STR = (r'[\u3000-\u303F]|[\u3040-\u309F]|[\u30A0-\u30FF]|[\uFF00-\uFFEF]'
@@ -34,7 +36,7 @@ def is_valid_image_url(url: str) -> bool:
     return url.startswith('http') and (url.endswith('.png') or url.endswith('.jpg'))
 
 
-def extract_image_url(m: discord.Message) -> str:
+def extract_image_url(m: discord.Message) -> Optional[str]:
     if is_valid_image_url(m.content):
         return m.content
     if m.attachments and len(m.attachments) and is_valid_image_url(m.attachments[0].url):

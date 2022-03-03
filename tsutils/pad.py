@@ -1,5 +1,3 @@
-import pytz
-
 # This was overwritten by voltron. PDX opted to copy it +10,000 ids away
 CROWS_1 = {x: x + 10000 for x in range(2601, 2635 + 1)}
 # This isn't overwritten but PDX adjusted anyway

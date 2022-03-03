@@ -9,6 +9,7 @@ ReceivableEmoji = Union[SendableEmoji, discord.PartialEmoji]
 YES_EMOJI = '\N{WHITE HEAVY CHECK MARK}'
 NO_EMOJI = '\N{CROSS MARK}'
 
+
 def char_to_emoji(c: str) -> SendableEmoji:
     """Casts individual characters & the integer 10 as emojis"""
     c = str(c).lower()
