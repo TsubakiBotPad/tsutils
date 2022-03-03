@@ -1,9 +1,9 @@
 import urllib.parse
 from typing import Optional
 
-from tsutils.enums import MonsterLinkTarget
 from tsutils.pad import get_pdx_id
-from tsutils.query_settings import QuerySettings
+from tsutils.query_settings.enums import MonsterLinkTarget
+from tsutils.query_settings.query_settings import QuerySettings
 
 CLOUDFRONT_URL = "https://d30r6ivozz8w2a.cloudfront.net"
 MEDIA_PATH = CLOUDFRONT_URL + '/media/'
@@ -78,5 +78,6 @@ class MonsterLink:
             return MonsterLink.padindex(m)
         if query_settings is None:
             return MonsterLink.padindex(m)
-        return MonsterLink.padindex(
-            m) if query_settings.linktarget == MonsterLinkTarget.padindex else MonsterLink.ilmina(m)
+        return MonsterLink.padindex(m) \
+            if query_settings.linktarget == MonsterLinkTarget.padindex \
+            else MonsterLink.ilmina(m)

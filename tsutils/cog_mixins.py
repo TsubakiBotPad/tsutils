@@ -27,7 +27,7 @@ class CogMixin(Cog, metaclass=CogABCMeta):
         ret = []
         for mixin in self.active_mixins:
             if (text := await super(mixin, self).red_get_data_for_user(user_id=user_id)):  # noqa
-                ret.append(text)
+                ret.append(str(text))
         return ret
 
     async def delete_mixin_user_data(self, requester: str, user_id: int) -> None:

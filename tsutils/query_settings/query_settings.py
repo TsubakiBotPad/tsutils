@@ -2,15 +2,17 @@ import re
 from enum import Enum
 from typing import Any, Dict
 
-from tsutils.enums import Server, EvoToFocus, AltEvoSort, ChildMenuType, LsMultiplier, CardPlusModifier, \
+from tsutils.enums import Server
+from tsutils.query_settings.enums import EvoToFocus, AltEvoSort, ChildMenuType, LsMultiplier, CardPlusModifier, \
     EvoGrouping, CardModeModifier, CardLevelModifier, MonsterLinkTarget
+from tsutils.query_settings.validators import Color, InvalidArgument
 
 SETTINGS_REGEX = re.compile(r'(?:--|—)(\w+)(?::{(.+?)})?')
 
 
 class QuerySettings:
     SERIALIZED_VALUES = ['server', 'evosort', 'child_menu_type', 'lsmultiplier', 'cardplus', 'evogrouping',
-                         'cardmode', 'cardlevel', 'linktarget']
+                         'cardmode', 'cardlevel', 'linktarget', 'color']
     NAMES_TO_ENUMS = {
         'na_prio': EvoToFocus,
         'server': Server,
@@ -49,9 +51,11 @@ class QuerySettings:
         'padindex': MonsterLinkTarget.padindex,
         'chesterip': MonsterLinkTarget.padindex,
     }
-    SETTINGS_WITH_DATA_NAMES = []
+    NAMES_TO_VALIDATORS = {
+        'color': Color,
+    }
 
-    def __init__(self,
+    def __init__(self, *,
                  na_prio: EvoToFocus = EvoToFocus.naprio,
                  server: Server = Server.COMBINED,
                  evosort: AltEvoSort = AltEvoSort.dfs,
@@ -61,7 +65,9 @@ class QuerySettings:
                  evogrouping: EvoGrouping = EvoGrouping.groupevos,
                  cardmode: CardModeModifier = CardModeModifier.solo,
                  cardlevel: CardLevelModifier = CardLevelModifier.lv110,
-                 linktarget: MonsterLinkTarget = MonsterLinkTarget.padindex
+                 linktarget: MonsterLinkTarget = MonsterLinkTarget.padindex,
+
+                 color: str = "0",
                  ):
         self.na_prio = na_prio
         self.server = server
@@ -73,6 +79,8 @@ class QuerySettings:
         self.cardmode = cardmode
         self.cardlevel = cardlevel
         self.linktarget = linktarget
+
+        self.color = color
 
     @classmethod
     def extract(cls, fm_flags: Dict[str, Any], query: str) -> "QuerySettings":
@@ -86,17 +94,25 @@ class QuerySettings:
                 value = cls.SETTINGS_TO_ENUMS[setting]
                 key = cls.ENUMS_TO_NAMES[type(value)]
                 fm_flags[key] = value
-            elif setting in cls.SETTINGS_WITH_DATA_NAMES:
-                fm_flags[setting] = data
+            elif setting in cls.NAMES_TO_VALIDATORS:
+                try:
+                    fm_flags[setting] = cls.NAMES_TO_VALIDATORS[setting].convert(data)  # noqa
+                except InvalidArgument:
+                    pass
         return QuerySettings(**fm_flags)
 
     def serialize(self: "QuerySettings") -> Dict[str, Any]:
-        return {v: getattr(self, v).value for v in self.SERIALIZED_VALUES}
+        return {key: value.value if key in self.NAMES_TO_ENUMS else value
+                for key in self.SERIALIZED_VALUES if (value := getattr(self, key))}
 
-    @staticmethod
-    def deserialize(data: Dict[str, Any]) -> "QuerySettings":
+    @classmethod
+    def deserialize(cls, data: Dict[str, Any]) -> "QuerySettings":
         enumdata = {}
         for key, value in data.items():
-            enumdata[key] = QuerySettings.NAMES_TO_ENUMS[key](value)  # noqa
-
+            if key in cls.NAMES_TO_ENUMS:
+                enumdata[key] = cls.NAMES_TO_ENUMS[key](value)  # noqa
+            elif key in cls.NAMES_TO_VALIDATORS:
+                enumdata[key] = value
+            else:
+                raise KeyError(f"Invalid key: {key}")
         return QuerySettings(**enumdata)
