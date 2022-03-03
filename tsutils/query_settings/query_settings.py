@@ -96,7 +96,7 @@ class QuerySettings:
                 fm_flags[key] = value
             elif setting in cls.NAMES_TO_VALIDATORS:
                 try:
-                    fm_flags[setting] = cls.NAMES_TO_VALIDATORS[setting](data)  # noqa
+                    fm_flags[setting] = cls.NAMES_TO_VALIDATORS[setting].convert(data)  # noqa
                 except InvalidArgument:
                     pass
         return QuerySettings(**fm_flags)
