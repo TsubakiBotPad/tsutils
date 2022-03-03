@@ -9,6 +9,9 @@ class InvalidArgument(BadArgument):
 
 
 class Validator(ABC):
+    def __new__(cls, *args, **kwargs):
+        raise TypeError("Validators cannot be instantiated")
+    
     @classmethod
     @abstractmethod
     def convert(cls, arg: str) -> str:
