@@ -102,8 +102,8 @@ class QuerySettings:
         return QuerySettings(**fm_flags)
 
     def serialize(self: "QuerySettings") -> Dict[str, Any]:
-        return {v: value.value if value in self.NAMES_TO_ENUMS else value
-                for v in self.SERIALIZED_VALUES if (value := getattr(self, v))}
+        return {key: value.value if key in self.NAMES_TO_ENUMS else value
+                for key in self.SERIALIZED_VALUES if (value := getattr(self, key))}
 
     @classmethod
     def deserialize(cls, data: Dict[str, Any]) -> "QuerySettings":
