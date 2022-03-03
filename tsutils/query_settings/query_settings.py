@@ -51,7 +51,7 @@ class QuerySettings:
         'padindex': MonsterLinkTarget.padindex,
         'chesterip': MonsterLinkTarget.padindex,
     }
-    SETTINGS_TO_CONVERTERS = {
+    NAMES_TO_VALIDATORS = {
         'color': Color,
     }
 
@@ -94,20 +94,25 @@ class QuerySettings:
                 value = cls.SETTINGS_TO_ENUMS[setting]
                 key = cls.ENUMS_TO_NAMES[type(value)]
                 fm_flags[key] = value
-            elif setting in cls.SETTINGS_TO_CONVERTERS:
+            elif setting in cls.NAMES_TO_VALIDATORS:
                 try:
-                    fm_flags[setting] = cls.SETTINGS_TO_CONVERTERS[setting](data)  # noqa
+                    fm_flags[setting] = cls.NAMES_TO_VALIDATORS[setting](data)  # noqa
                 except InvalidArgument:
                     pass
         return QuerySettings(**fm_flags)
 
     def serialize(self: "QuerySettings") -> Dict[str, Any]:
-        return {v: getattr(self, v).value for v in self.SERIALIZED_VALUES}
+        return {v: value.value if value in self.NAMES_TO_ENUMS else value
+                for v in self.SERIALIZED_VALUES if (value := getattr(self, v))}
 
-    @staticmethod
-    def deserialize(data: Dict[str, Any]) -> "QuerySettings":
+    @classmethod
+    def deserialize(cls, data: Dict[str, Any]) -> "QuerySettings":
         enumdata = {}
         for key, value in data.items():
-            enumdata[key] = QuerySettings.NAMES_TO_ENUMS[key](value)  # noqa
-
+            if key in cls.NAMES_TO_ENUMS:
+                enumdata[key] = cls.NAMES_TO_ENUMS[key](value)  # noqa
+            elif key in cls.NAMES_TO_VALIDATORS:
+                enumdata[key] = value
+            else:
+                raise KeyError(f"Invalid key: {key}")
         return QuerySettings(**enumdata)

@@ -8,14 +8,14 @@ class InvalidArgument(BadArgument):
     pass
 
 
-class Converter(ABC):
+class Validator(ABC):
     @classmethod
     @abstractmethod
-    async def convert(cls, arg: str) -> str:
+    def convert(cls, arg: str) -> str:
         ...
 
 
-class Color(Converter):
+class Color(Validator):
     COLORS = {
         'blue': 0x3498db,
         'blurple': 0x7289da,
@@ -52,7 +52,7 @@ class Color(Converter):
     }
 
     @classmethod
-    async def convert(cls, arg: str) -> str:
+    def convert(cls, arg: str) -> str:
         if arg in cls.COLORS:
             return str(cls.COLORS[arg])
         elif re.match(r"^#?[0-9a-fA-F]{6}$", arg):
