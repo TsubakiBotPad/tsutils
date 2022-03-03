@@ -1,7 +1,4 @@
-from tsutils import enums
 from enum import Enum
-
-Server = enums.Server
 
 
 class EvoToFocus(Enum):

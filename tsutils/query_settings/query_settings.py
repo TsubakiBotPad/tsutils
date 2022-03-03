@@ -2,7 +2,8 @@ import re
 from enum import Enum
 from typing import Any, Dict
 
-from .enums import Server, EvoToFocus, AltEvoSort, ChildMenuType, LsMultiplier, CardPlusModifier, \
+from tsutils.enums import Server
+from tsutils.query_settings.enums import EvoToFocus, AltEvoSort, ChildMenuType, LsMultiplier, CardPlusModifier, \
     EvoGrouping, CardModeModifier, CardLevelModifier, MonsterLinkTarget
 from tsutils.query_settings.validators import Color, InvalidArgument
 
