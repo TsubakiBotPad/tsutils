@@ -2,7 +2,7 @@ import re
 from enum import Enum
 from typing import Any, Dict
 
-from .enums import Index, EvoToFocus, AltEvoSort, ChildMenuType, LsMultiplier, CardPlusModifier, \
+from .enums import Server, EvoToFocus, AltEvoSort, ChildMenuType, LsMultiplier, CardPlusModifier, \
     EvoGrouping, CardModeModifier, CardLevelModifier, MonsterLinkTarget
 from tsutils.query_settings.validators import Color, InvalidArgument
 
@@ -14,7 +14,7 @@ class QuerySettings:
                          'cardmode', 'cardlevel', 'linktarget', 'color']
     NAMES_TO_ENUMS = {
         'na_prio': EvoToFocus,
-        'server': Index,
+        'server': Server,
         'evosort': AltEvoSort,
         'child_menu_type': ChildMenuType,
         'lsmultiplier': LsMultiplier,
@@ -26,9 +26,8 @@ class QuerySettings:
     }
     ENUMS_TO_NAMES = {v: k for k, v in NAMES_TO_ENUMS.items()}
     SETTINGS_TO_ENUMS = {
-        "na": Index.NA,
-        "allservers": Index.COMBINED,
-        "allindexes": Index.COMBINED,
+        "na": Server.NA,
+        "allservers": Server.COMBINED,
         "dfs": AltEvoSort.dfs,
         "numerical": AltEvoSort.numerical,
         "nadiff": ChildMenuType.NaDiffMenu,
@@ -57,7 +56,7 @@ class QuerySettings:
 
     def __init__(self, *,
                  na_prio: EvoToFocus = EvoToFocus.naprio,
-                 server: Index = Index.COMBINED,
+                 server: Server = Server.COMBINED,
                  evosort: AltEvoSort = AltEvoSort.dfs,
                  child_menu_type: ChildMenuType = ChildMenuType.IdMenu,
                  lsmultiplier: LsMultiplier = LsMultiplier.lsdouble,

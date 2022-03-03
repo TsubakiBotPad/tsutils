@@ -1,9 +1,7 @@
+from tsutils import enums
 from enum import Enum
 
-
-class Index(Enum):
-    COMBINED = "COMBINED"
-    NA = "NA"
+Server = enums.Server
 
 
 class EvoToFocus(Enum):
