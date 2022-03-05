@@ -18,7 +18,7 @@ class Validator(ABC):
         ...
 
 
-class Color(Validator):
+class EmbedColor(Validator):
     COLORS = {
         'blue': 0x3498db,
         'blurple': 0x7289da,
