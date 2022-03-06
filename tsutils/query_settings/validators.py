@@ -14,7 +14,7 @@ class Validator(ABC):
     
     @classmethod
     @abstractmethod
-    def convert(cls, arg: str) -> str:
+    def convert(cls, ctx, arg: str) -> str:
         ...
 
 
