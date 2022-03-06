@@ -14,7 +14,7 @@ class Validator(ABC):
     
     @classmethod
     @abstractmethod
-    def convert(cls, arg: str) -> str:
+    def convert(cls, ctx, arg: str) -> str:
         ...
 
 
@@ -55,7 +55,7 @@ class EmbedColor(Validator):
     }
 
     @classmethod
-    def convert(cls, arg: str) -> str:
+    def convert(cls, ctx, arg: str) -> str:
         if arg in cls.COLORS:
             return str(cls.COLORS[arg])
         elif re.match(r"^#?[0-9a-fA-F]{6}$", arg):
