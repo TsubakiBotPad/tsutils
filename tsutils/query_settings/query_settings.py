@@ -139,8 +139,9 @@ class QuerySettings:
 
     def get_embedcolor(self):
         if not self.embedcolor:
+            # probably unnecessary, but just in case
             return discord.Color.default()
         elif self.embedcolor == "random":
             return discord.Color(random.randint(0x000000, 0xffffff))
         else:
-            return discord.Color(self.embedcolor)
+            return discord.Color(int(self.embedcolor))
