@@ -138,7 +138,7 @@ class QuerySettings:
         return await bot.get_cog("DBCog").config.user(user).fm_flags()
 
     def get_embedcolor(self):
-        if self.embedcolor is None:
+        if not self.embedcolor:
             return discord.Color.default()
         elif self.embedcolor == "random":
             return discord.Color(random.randint(0x000000, 0xffffff))
