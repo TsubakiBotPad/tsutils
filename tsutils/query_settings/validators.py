@@ -17,6 +17,11 @@ class Validator(ABC):
     def convert(cls, ctx, arg: str) -> str:
         ...
 
+    @classmethod
+    @abstractmethod
+    def parse(cls, arg: str) -> str:
+        ...
+
 
 class EmbedColor(Validator):
     COLORS = {
@@ -55,7 +60,13 @@ class EmbedColor(Validator):
     }
 
     @classmethod
-    def convert(cls, ctx, arg: str) -> str:
+    async def convert(cls, ctx, arg: str) -> str:
+        # converters need to be async
+        return cls.parse(arg)
+
+    @classmethod
+    def parse(cls, arg: str) -> str:
+        # for the times we just want to parse & don't want an async method
         if arg in cls.COLORS:
             return str(cls.COLORS[arg])
         elif re.match(r"^#?[0-9a-fA-F]{6}$", arg):
