@@ -44,7 +44,7 @@ class SimpleTextView:
     def embed(state: SimpleTextViewState):
         return EmbedView(
             EmbedMain(
-                color=state.query_settings.color,
+                color=state.query_settings.get_embedcolor(),
                 description=state.message
             ),
             embed_footer=embed_footer_with_state(state),
