@@ -16,7 +16,7 @@ SETTINGS_REGEX = re.compile(r'(?:--|—)(\w+)(?::(?:({)|)((?(2)[^}]+|\S+)))?')
 
 class QuerySettings:
     SERIALIZED_NAMES = ['server', 'evosort', 'child_menu_type', 'lsmultiplier', 'cardplus', 'evogrouping',
-                        'cardmode', 'cardlevel', 'linktarget', '_embedcolor']
+                        'cardmode', 'cardlevel', 'linktarget', 'embedcolor']
     NAMES_TO_ENUMS: Dict[str, EnumMeta] = {
         'na_prio': EvoToFocus,
         'server': Server,
@@ -29,7 +29,7 @@ class QuerySettings:
         'cardlevel': CardLevelModifier,
         'linktarget': MonsterLinkTarget,
     }
-    NAMES_TO_VALIDATORS = {
+    NAMES_TO_CONVERTERS = {
         'embedcolor': EmbedColor,
     }
     ENUMS_TO_NAMES = {v: k for k, v in NAMES_TO_ENUMS.items()}
@@ -102,7 +102,7 @@ class QuerySettings:
         for name, value in fm_flags.items():
             if name in cls.NAMES_TO_ENUMS:
                 settings[name] = cls.NAMES_TO_ENUMS[name](value)
-            elif name in cls.NAMES_TO_VALIDATORS:
+            elif name in cls.NAMES_TO_CONVERTERS:
                 settings[name] = value
 
         for setting, _, data in re.findall(SETTINGS_REGEX, query.lower()):
@@ -110,9 +110,9 @@ class QuerySettings:
                 value = cls.SETTINGS_TO_ENUMS[setting]
                 name = cls.ENUMS_TO_NAMES[value.__class__]
                 settings[name] = value
-            elif setting in cls.NAMES_TO_VALIDATORS:
+            elif setting in cls.NAMES_TO_CONVERTERS:
                 try:
-                    settings[setting] = cls.NAMES_TO_VALIDATORS[setting].parse(data)
+                    settings[setting] = cls.NAMES_TO_CONVERTERS[setting].parse(data)
                 except InvalidArgument:
                     if force_valid:
                         raise
@@ -133,12 +133,11 @@ class QuerySettings:
     def serialize(self) -> Dict[str, Any]:
         ret = {}
         for key in self.SERIALIZED_NAMES:
-            setting = getattr(self, key)
-            if setting:
-                if key in self.NAMES_TO_ENUMS.keys():
-                    ret[key] = setting.value
-                else:
-                    ret[key.lstrip('_')] = setting
+            if key in self.NAMES_TO_ENUMS:
+                ret[key] = getattr(self, key).value
+            elif key in self.NAMES_TO_CONVERTERS:
+                # Internally, converter names start with a '_'
+                ret[key] = getattr(self, '_'+key)
         return ret
 
     @classmethod
@@ -147,7 +146,7 @@ class QuerySettings:
         for key, value in data.items():
             if key in cls.NAMES_TO_ENUMS:
                 enumdata[key] = cls.NAMES_TO_ENUMS[key](value)
-            elif key in cls.NAMES_TO_VALIDATORS:
+            elif key in cls.NAMES_TO_CONVERTERS:
                 enumdata[key] = value
             else:
                 raise KeyError(f"Invalid key: {key}")
