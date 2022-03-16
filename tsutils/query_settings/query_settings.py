@@ -94,7 +94,7 @@ class QuerySettings:
             return discord.Color(int(self._embedcolor))
 
     @classmethod
-    def extract(cls, fm_flags: Dict[str, Any], query: str, *, force_valid: bool = True) \
+    def extract(cls, fm_flags: Dict[str, Any], query: str, *, force_valid: bool = False) \
             -> "QuerySettings":
         """Combine a user's fm_flags and a query string to create a new QuerySettings object"""
         settings = {}
