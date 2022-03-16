@@ -120,7 +120,7 @@ class QuerySettings:
         return QuerySettings(**settings)
 
     @classmethod
-    async def extract_raw(cls, user: discord.User, bot: Bot, query: str, *, force_valid: bool = True) \
+    async def extract_raw(cls, user: discord.User, bot: Bot, query: str, *, force_valid: bool = False) \
             -> "QuerySettings":
         dbcog: Any = bot.get_cog("DBCog")
         if dbcog is None:
