@@ -16,7 +16,7 @@ SETTINGS_REGEX = re.compile(r'(?:--|—)(\w+)(?::{(.+?)})?')
 
 class QuerySettings:
     SERIALIZED_VALUES = ['server', 'evosort', 'child_menu_type', 'lsmultiplier', 'cardplus', 'evogrouping',
-                         'cardmode', 'cardlevel', 'linktarget', 'embedcolor']
+                         'cardmode', 'cardlevel', 'linktarget', '_embedcolor']
     NAMES_TO_ENUMS: Dict[str, EnumMeta] = {
         'na_prio': EvoToFocus,
         'server': Server,
@@ -138,7 +138,7 @@ class QuerySettings:
                 if key in self.NAMES_TO_ENUMS.keys():
                     ret[key] = setting.value
                 else:
-                    ret[key] = setting
+                    ret[key.lstrip('_')] = setting
         return ret
 
     @classmethod
