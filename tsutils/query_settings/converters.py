@@ -10,7 +10,7 @@ class InvalidArgument(BadArgument):
 
 class QSConverter(Converter, metaclass=ABCMeta):
     @classmethod
-    def convert(cls, ctx, arg: str) -> str:
+    async def convert(cls, ctx, arg: str) -> str:
         return cls.parse(arg)
 
     @classmethod
