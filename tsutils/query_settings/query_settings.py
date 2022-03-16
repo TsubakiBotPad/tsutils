@@ -88,6 +88,8 @@ class QuerySettings:
 
     @property
     def embedcolor(self) -> discord.Color:
+        if not self._embedcolor:
+            return discord.Color.default()
         if self._embedcolor == "random":
             return discord.Color(random.randint(0x000000, 0xffffff))
         else:
