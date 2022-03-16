@@ -57,9 +57,10 @@ class EmbedColor(QSConverter):
 
     @classmethod
     def parse(cls, arg):
+        arg = arg.strip().replace('_', ' ')
         if arg in cls.COLORS:
             return str(cls.COLORS[arg])
         elif re.match(r"^#?[0-9a-fA-F]{6}$", arg):
             return str(int(arg.lstrip("#"), 16))
         else:
-            raise InvalidArgument("Invalid color!  Valid colors are any hexcode and:\n" + ", ".join(cls.COLORS))
+            raise InvalidArgument(f"Invalid color: {arg}! Valid colors are any hexcode and {', '.join(cls.COLORS)}")

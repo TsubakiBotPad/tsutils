@@ -7,16 +7,16 @@ import discord
 from discord.ext.commands import Bot
 
 from tsutils.enums import Server
+from tsutils.query_settings.converters import EmbedColor, InvalidArgument
 from tsutils.query_settings.enums import AltEvoSort, CardLevelModifier, CardModeModifier, CardPlusModifier, \
     ChildMenuType, EvoGrouping, EvoToFocus, LsMultiplier, MonsterLinkTarget
-from tsutils.query_settings.converters import EmbedColor, InvalidArgument
 
-SETTINGS_REGEX = re.compile(r'(?:--|—)(\w+)(?::{(.+?)})?')
+SETTINGS_REGEX = re.compile(r'(?:--|—)(\w+)(?::(?:({)|)((?(2)[^}]+|\S+)))?')
 
 
 class QuerySettings:
-    SERIALIZED_VALUES = ['server', 'evosort', 'child_menu_type', 'lsmultiplier', 'cardplus', 'evogrouping',
-                         'cardmode', 'cardlevel', 'linktarget', '_embedcolor']
+    SERIALIZED_NAMES = ['server', 'evosort', 'child_menu_type', 'lsmultiplier', 'cardplus', 'evogrouping',
+                        'cardmode', 'cardlevel', 'linktarget', '_embedcolor']
     NAMES_TO_ENUMS: Dict[str, EnumMeta] = {
         'na_prio': EvoToFocus,
         'server': Server,
@@ -28,6 +28,9 @@ class QuerySettings:
         'cardmode': CardModeModifier,
         'cardlevel': CardLevelModifier,
         'linktarget': MonsterLinkTarget,
+    }
+    NAMES_TO_VALIDATORS = {
+        'embedcolor': EmbedColor,
     }
     ENUMS_TO_NAMES = {v: k for k, v in NAMES_TO_ENUMS.items()}
     SETTINGS_TO_ENUMS = {
@@ -54,9 +57,6 @@ class QuerySettings:
         'ilmina': MonsterLinkTarget.ilmina,
         'padindex': MonsterLinkTarget.padindex,
         'chesterip': MonsterLinkTarget.padindex,
-    }
-    NAMES_TO_VALIDATORS = {
-        'embedcolor': EmbedColor,
     }
 
     def __init__(self, *,
@@ -105,7 +105,7 @@ class QuerySettings:
             elif name in cls.NAMES_TO_VALIDATORS:
                 settings[name] = value
 
-        for setting, data in re.findall(SETTINGS_REGEX, query.lower()):
+        for setting, _, data in re.findall(SETTINGS_REGEX, query.lower()):
             if setting in cls.SETTINGS_TO_ENUMS:
                 value = cls.SETTINGS_TO_ENUMS[setting]
                 name = cls.ENUMS_TO_NAMES[value.__class__]
@@ -117,7 +117,7 @@ class QuerySettings:
                     if force_valid:
                         raise
 
-        return QuerySettings(**settings)
+        return cls(**settings)
 
     @classmethod
     async def extract_raw(cls, user: discord.User, bot: Bot, query: str, *, force_valid: bool = False) \
@@ -132,7 +132,7 @@ class QuerySettings:
 
     def serialize(self) -> Dict[str, Any]:
         ret = {}
-        for key in self.SERIALIZED_VALUES:
+        for key in self.SERIALIZED_NAMES:
             setting = getattr(self, key)
             if setting:
                 if key in self.NAMES_TO_ENUMS.keys():
@@ -152,3 +152,7 @@ class QuerySettings:
             else:
                 raise KeyError(f"Invalid key: {key}")
         return QuerySettings(**enumdata)
+
+    @staticmethod
+    def strip(cls, query: str) -> str:
+        return re.sub(r' +', ' ', re.sub(r'(--|—)\w+(:{.+?}|:\S+)?', ' ', query))
