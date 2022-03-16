@@ -1,22 +1,23 @@
 import random
 import re
-from enum import Enum, EnumMeta
+from enum import EnumMeta
 from typing import Any, Dict
 
 import discord
+from discord.ext.commands import Bot
 
 from tsutils.enums import Server
-from tsutils.query_settings.enums import EvoToFocus, AltEvoSort, ChildMenuType, LsMultiplier, CardPlusModifier, \
-    EvoGrouping, CardModeModifier, CardLevelModifier, MonsterLinkTarget
-from tsutils.query_settings.validators import InvalidArgument, EmbedColor
+from tsutils.query_settings.converters import EmbedColor, InvalidArgument
+from tsutils.query_settings.enums import AltEvoSort, CardLevelModifier, CardModeModifier, CardPlusModifier, \
+    ChildMenuType, EvoGrouping, EvoToFocus, LsMultiplier, MonsterLinkTarget
 
-SETTINGS_REGEX = re.compile(r'(?:--|—)(\w+)(?::{(.+?)})?')
+SETTINGS_REGEX = re.compile(r'(?:--|—)(\w+)(?::(?:({)|)((?(2)[^}]+|\S+)))?')
 
 
 class QuerySettings:
-    SERIALIZED_VALUES = ['server', 'evosort', 'child_menu_type', 'lsmultiplier', 'cardplus', 'evogrouping',
-                         'cardmode', 'cardlevel', 'linktarget', 'embedcolor']
-    NAMES_TO_ENUMS = {
+    SERIALIZED_NAMES = ['server', 'evosort', 'child_menu_type', 'lsmultiplier', 'cardplus', 'evogrouping',
+                        'cardmode', 'cardlevel', 'linktarget', 'embedcolor']
+    NAMES_TO_ENUMS: Dict[str, EnumMeta] = {
         'na_prio': EvoToFocus,
         'server': Server,
         'evosort': AltEvoSort,
@@ -27,6 +28,9 @@ class QuerySettings:
         'cardmode': CardModeModifier,
         'cardlevel': CardLevelModifier,
         'linktarget': MonsterLinkTarget,
+    }
+    NAMES_TO_CONVERTERS = {
+        'embedcolor': EmbedColor,
     }
     ENUMS_TO_NAMES = {v: k for k, v in NAMES_TO_ENUMS.items()}
     SETTINGS_TO_ENUMS = {
@@ -54,9 +58,6 @@ class QuerySettings:
         'padindex': MonsterLinkTarget.padindex,
         'chesterip': MonsterLinkTarget.padindex,
     }
-    NAMES_TO_VALIDATORS = {
-        'embedcolor': EmbedColor,
-    }
 
     def __init__(self, *,
                  na_prio: EvoToFocus = EvoToFocus.naprio,
@@ -83,42 +84,60 @@ class QuerySettings:
         self.cardlevel = cardlevel
         self.linktarget = linktarget
 
-        self.embedcolor = embedcolor
+        self._embedcolor = embedcolor
+
+    @property
+    def embedcolor(self) -> discord.Color:
+        if self._embedcolor == "random":
+            return discord.Color(random.randint(0x000000, 0xffffff))
+        else:
+            return discord.Color(int(self._embedcolor))
 
     @classmethod
-    async def extract_raw(cls, user: discord.User, bot, query: str) -> "QuerySettings":
-        return cls.extract(await cls._get_flags(user, bot), query)
+    def extract(cls, fm_flags: Dict[str, Any], query: str, *, force_valid: bool = False) \
+            -> "QuerySettings":
+        """Combine a user's fm_flags and a query string to create a new QuerySettings object"""
+        settings = {}
 
-    @classmethod
-    def extract(cls, fm_flags: Dict[str, Any], query: str) -> "QuerySettings":
-        fm_flags = fm_flags.copy()
-        for key, value in fm_flags.items():
-            if not isinstance(value, Enum):
-                setting = QuerySettings.NAMES_TO_ENUMS.get(key)
-                if isinstance(setting, EnumMeta):
-                    fm_flags[key] = setting(value)
+        for name, value in fm_flags.items():
+            if name in cls.NAMES_TO_ENUMS:
+                settings[name] = cls.NAMES_TO_ENUMS[name](value)
+            elif name in cls.NAMES_TO_CONVERTERS:
+                settings[name] = value
 
-        for setting, data in re.findall(SETTINGS_REGEX, query.lower()):
+        for setting, _, data in re.findall(SETTINGS_REGEX, query.lower()):
             if setting in cls.SETTINGS_TO_ENUMS:
                 value = cls.SETTINGS_TO_ENUMS[setting]
-                key = cls.ENUMS_TO_NAMES[type(value)]
-                fm_flags[key] = value
-            elif setting in cls.NAMES_TO_VALIDATORS:
+                name = cls.ENUMS_TO_NAMES[value.__class__]
+                settings[name] = value
+            elif setting in cls.NAMES_TO_CONVERTERS:
                 try:
-                    fm_flags[setting] = cls.NAMES_TO_VALIDATORS[setting].parse(None, data)  # noqa
+                    settings[setting] = cls.NAMES_TO_CONVERTERS[setting].parse(data)
                 except InvalidArgument:
-                    pass
-        return QuerySettings(**fm_flags)
+                    if force_valid:
+                        raise
 
-    def serialize(self: "QuerySettings") -> Dict[str, Any]:
+        return cls(**settings)
+
+    @classmethod
+    async def extract_raw(cls, user: discord.User, bot: Bot, query: str, *, force_valid: bool = False) \
+            -> "QuerySettings":
+        dbcog: Any = bot.get_cog("DBCog")
+        if dbcog is None:
+            fm_flags = {}
+        else:
+            fm_flags = await dbcog.config.user(user).fm_flags()
+
+        return cls.extract(fm_flags, query, force_valid=force_valid)
+
+    def serialize(self) -> Dict[str, Any]:
         ret = {}
-        for key in self.SERIALIZED_VALUES:
-            setting = getattr(self, key)
-            if setting:
-                if key in self.NAMES_TO_ENUMS.keys():
-                    ret[key] = setting.value
-                else:
-                    ret[key] = setting
+        for key in self.SERIALIZED_NAMES:
+            if key in self.NAMES_TO_ENUMS:
+                ret[key] = getattr(self, key).value
+            elif key in self.NAMES_TO_CONVERTERS:
+                # Internally, converter names start with a '_'
+                ret[key] = getattr(self, '_'+key)
         return ret
 
     @classmethod
@@ -126,22 +145,13 @@ class QuerySettings:
         enumdata = {}
         for key, value in data.items():
             if key in cls.NAMES_TO_ENUMS:
-                enumdata[key] = cls.NAMES_TO_ENUMS[key](value)  # noqa
-            elif key in cls.NAMES_TO_VALIDATORS:
+                enumdata[key] = cls.NAMES_TO_ENUMS[key](value)
+            elif key in cls.NAMES_TO_CONVERTERS:
                 enumdata[key] = value
             else:
                 raise KeyError(f"Invalid key: {key}")
         return QuerySettings(**enumdata)
 
     @staticmethod
-    async def _get_flags(user: discord.User, bot) -> Dict[str, Any]:
-        return await bot.get_cog("DBCog").config.user(user).fm_flags()
-
-    def get_embedcolor(self):
-        if not self.embedcolor:
-            # probably unnecessary, but just in case
-            return discord.Color.default()
-        elif self.embedcolor == "random":
-            return discord.Color(random.randint(0x000000, 0xffffff))
-        else:
-            return discord.Color(int(self.embedcolor))
+    def strip(cls, query: str) -> str:
+        return re.sub(r' +', ' ', re.sub(r'(--|—)\w+(:{.+?}|:\S+)?', ' ', query))
