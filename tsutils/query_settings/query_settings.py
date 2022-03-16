@@ -96,6 +96,7 @@ class QuerySettings:
     @classmethod
     def extract(cls, fm_flags: Dict[str, Any], query: str, *, force_valid: bool = True) \
             -> "QuerySettings":
+        """Combine a user's fm_flags and a query string to create a new QuerySettings object"""
         settings = {}
 
         for name, value in fm_flags.items():
