@@ -6,6 +6,11 @@ class EvoToFocus(Enum):
     naprio = 1
 
 
+class OrModifierPriority(Enum):
+    orfirst = True
+    orlast = False
+
+
 class AltEvoSort(Enum):
     dfs = 0
     numerical = 1

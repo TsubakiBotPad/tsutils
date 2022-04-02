@@ -9,16 +9,20 @@ from discord.ext.commands import Bot
 from tsutils.enums import Server
 from tsutils.query_settings.converters import EmbedColor, InvalidArgument
 from tsutils.query_settings.enums import AltEvoSort, CardLevelModifier, CardModeModifier, CardPlusModifier, \
-    ChildMenuType, EvoGrouping, EvoToFocus, LsMultiplier, MonsterLinkTarget
+    ChildMenuType, EvoGrouping, EvoToFocus, LsMultiplier, MonsterLinkTarget, OrModifierPriority
 
 SETTINGS_REGEX = re.compile(r'(?:--|—)(\w+)(?::(?:({)|)((?(2)[^}]+|\S+)))?')
 
 
 class QuerySettings:
+    # properties that need to be retained by the menu after a monster has been found
+    # anything that's used only for the purpose of locating a monster/list of monsters once does not need to be here
     SERIALIZED_NAMES = ['server', 'evosort', 'child_menu_type', 'lsmultiplier', 'cardplus', 'evogrouping',
                         'cardmode', 'cardlevel', 'linktarget', 'embedcolor']
+
     NAMES_TO_ENUMS: Dict[str, EnumMeta] = {
         'na_prio': EvoToFocus,
+        'ormod_prio': OrModifierPriority,
         'server': Server,
         'evosort': AltEvoSort,
         'child_menu_type': ChildMenuType,
@@ -32,8 +36,13 @@ class QuerySettings:
     NAMES_TO_CONVERTERS = {
         'embedcolor': EmbedColor,
     }
-    ENUMS_TO_NAMES = {v: k for k, v in NAMES_TO_ENUMS.items()}
     SETTINGS_TO_ENUMS = {
+        # not serialized
+        "naprio": EvoToFocus.naprio,
+        "newest": EvoToFocus.newest,
+        "orfirst": OrModifierPriority.orfirst,
+        "orlast": OrModifierPriority.orlast,
+        # serialized
         "na": Server.NA,
         "allservers": Server.COMBINED,
         "dfs": AltEvoSort.dfs,
@@ -59,8 +68,11 @@ class QuerySettings:
         'chesterip': MonsterLinkTarget.padindex,
     }
 
+    ENUMS_TO_NAMES = {v: k for k, v in NAMES_TO_ENUMS.items()}
+
     def __init__(self, *,
                  na_prio: EvoToFocus = EvoToFocus.naprio,
+                 ormod_prio: OrModifierPriority = OrModifierPriority.orlast,
                  server: Server = Server.COMBINED,
                  evosort: AltEvoSort = AltEvoSort.dfs,
                  child_menu_type: ChildMenuType = ChildMenuType.IdMenu,
@@ -74,6 +86,7 @@ class QuerySettings:
                  embedcolor: str = "0",
                  ):
         self.na_prio = na_prio
+        self.ormod_prio = ormod_prio
         self.server = server
         self.evosort = evosort
         self.child_menu_type = child_menu_type
