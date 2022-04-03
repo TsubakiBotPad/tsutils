@@ -51,3 +51,8 @@ class CardLevelModifier(Enum):
 class MonsterLinkTarget(Enum):
     padindex = 0
     ilmina = 1
+
+
+class ShowHelp(Enum):
+    help = True
+    content = False

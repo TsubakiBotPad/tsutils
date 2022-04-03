@@ -9,7 +9,7 @@ from discord.ext.commands import Bot
 from tsutils.enums import Server
 from tsutils.query_settings.converters import EmbedColor, InvalidArgument
 from tsutils.query_settings.enums import AltEvoSort, CardLevelModifier, CardModeModifier, CardPlusModifier, \
-    ChildMenuType, EvoGrouping, EvoToFocus, LsMultiplier, MonsterLinkTarget, OrModifierPriority
+    ChildMenuType, EvoGrouping, EvoToFocus, LsMultiplier, MonsterLinkTarget, OrModifierPriority, ShowHelp
 
 SETTINGS_REGEX = re.compile(r'(?:--|—)(\w+)(?::(?:({)|)((?(2)[^}]+|\S+)))?')
 
@@ -18,7 +18,7 @@ class QuerySettings:
     # properties that need to be retained by the menu after a monster has been found
     # anything that's used only for the purpose of locating a monster/list of monsters once does not need to be here
     SERIALIZED_NAMES = ['server', 'evosort', 'child_menu_type', 'lsmultiplier', 'cardplus', 'evogrouping',
-                        'cardmode', 'cardlevel', 'linktarget', 'embedcolor']
+                        'cardmode', 'cardlevel', 'linktarget', 'embedcolor', 'showhelp']
 
     NAMES_TO_ENUMS: Dict[str, EnumMeta] = {
         'na_prio': EvoToFocus,
@@ -32,6 +32,7 @@ class QuerySettings:
         'cardmode': CardModeModifier,
         'cardlevel': CardLevelModifier,
         'linktarget': MonsterLinkTarget,
+        'showhelp': ShowHelp,
     }
     NAMES_TO_CONVERTERS = {
         'embedcolor': EmbedColor,
@@ -66,6 +67,8 @@ class QuerySettings:
         'ilmina': MonsterLinkTarget.ilmina,
         'padindex': MonsterLinkTarget.padindex,
         'chesterip': MonsterLinkTarget.padindex,
+        'help': ShowHelp.help,
+        'content': ShowHelp.content,
     }
 
     ENUMS_TO_NAMES = {v: k for k, v in NAMES_TO_ENUMS.items()}
@@ -82,6 +85,7 @@ class QuerySettings:
                  cardmode: CardModeModifier = CardModeModifier.solo,
                  cardlevel: CardLevelModifier = CardLevelModifier.lv110,
                  linktarget: MonsterLinkTarget = MonsterLinkTarget.padindex,
+                 showhelp: ShowHelp = ShowHelp.content,
 
                  embedcolor: str = "0",
                  ):
@@ -96,6 +100,7 @@ class QuerySettings:
         self.cardmode = cardmode
         self.cardlevel = cardlevel
         self.linktarget = linktarget
+        self.showhelp = showhelp
 
         self._embedcolor = embedcolor
 
