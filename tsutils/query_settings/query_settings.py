@@ -157,7 +157,7 @@ class QuerySettings:
                 ret[key] = getattr(self, key).value
             elif key in self.NAMES_TO_CONVERTERS:
                 # Internally, converter names start with a '_'
-                ret[key] = getattr(self, '_'+key)
+                ret[key] = getattr(self, '_' + key)
         return ret
 
     @classmethod
