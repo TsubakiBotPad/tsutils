@@ -187,3 +187,7 @@ def cancellation_message(msg: str) -> str:
 
 async def send_cancellation_message(ctx, msg: str) -> discord.Message:
     return await ctx.send(cancellation_message(msg))
+
+
+def indented(msg: str, level: int = 1) -> str:
+    return '\t\t' * level + msg
