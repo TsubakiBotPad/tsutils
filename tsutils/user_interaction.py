@@ -3,6 +3,8 @@ import re
 from typing import List, Literal, Optional
 
 import discord
+from redbot.core.utils.chat_formatting import pagify
+
 from tsutils.cogs.userpreferences import get_user_preference
 
 from .emoji import NO_EMOJI, SendableEmoji, YES_EMOJI
@@ -25,7 +27,8 @@ async def get_user_confirmation(ctx, text: str,
                                 yes_emoji: SendableEmoji = YES_EMOJI, no_emoji: SendableEmoji = NO_EMOJI,
                                 timeout: int = 10, force_delete: Optional[bool] = None, show_feedback: bool = False) \
         -> Literal[True, False, None]:
-    msg = await ctx.send(text)
+    msgs = [await ctx.send(page) for page in pagify(text)]
+    msg = msgs[-1]
     asyncio.create_task(msg.add_reaction(yes_emoji))
     asyncio.create_task(msg.add_reaction(no_emoji))
 
@@ -48,7 +51,8 @@ async def get_user_confirmation(ctx, text: str,
 
     if do_delete:
         try:
-            await msg.delete()
+            for message in msgs:
+                await message.delete()
         except discord.Forbidden:
             pass
 
