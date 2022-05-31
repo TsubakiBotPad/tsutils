@@ -94,11 +94,11 @@ AWAKENING_ID_TO_EMOJI_NAME_MAP = {
     88: 'addtype_attacker',
     89: 'addtype_physical',
     90: 'addtype_healer',
-    91: 'addattr_red',
-    92: 'addattr_blue',
-    93: 'addattr_green',
-    94: 'addattr_light',
-    95: 'addattr_dark',
+    91: 'subattr_red',
+    92: 'subattr_blue',
+    93: 'subattr_green',
+    94: 'subattr_light',
+    95: 'subattr_dark',
 }
 
 AWAKENING_RESTRICTED_LATENT_VALUE_TO_EMOJI_NAME_MAP = {
