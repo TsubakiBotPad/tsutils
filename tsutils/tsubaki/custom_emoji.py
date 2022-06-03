@@ -86,6 +86,19 @@ AWAKENING_ID_TO_EMOJI_NAME_MAP = {
     80: 'boost_attr4',
     81: 'boost_attr5',
     82: 'blob_boost',
+    83: 'addtype_dragon',
+    84: 'addtype_god',
+    85: 'addtype_devil',
+    86: 'addtype_machine',
+    87: 'addtype_balanced',
+    88: 'addtype_attacker',
+    89: 'addtype_physical',
+    90: 'addtype_healer',
+    91: 'subattr_red',
+    92: 'subattr_blue',
+    93: 'subattr_green',
+    94: 'subattr_light',
+    95: 'subattr_dark',
 }
 
 AWAKENING_RESTRICTED_LATENT_VALUE_TO_EMOJI_NAME_MAP = {
