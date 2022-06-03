@@ -1,6 +1,6 @@
 import asyncio
 import re
-from typing import List, Literal, Optional
+from typing import List, Literal, Optional, Union
 
 import discord
 from redbot.core.utils.chat_formatting import pagify
@@ -70,10 +70,17 @@ async def get_user_confirmation(ctx, text: str,
     return ret
 
 
-async def get_user_reaction(ctx, text: str, *emoji: SendableEmoji, timeout: int = 10,
-                            force_delete: Optional[bool] = None, show_feedback: bool = False) \
+async def get_user_reaction(ctx, message: Union[str, discord.Embed, discord.Message], *emoji: SendableEmoji,
+                            timeout: int = 10, force_delete: Optional[bool] = None, show_feedback: bool = False) \
         -> Optional[SendableEmoji]:
-    msg = await ctx.send(text)
+    if isinstance(message, str):
+        msg = await ctx.send(message)
+    elif isinstance(message, discord.Embed):
+        msg = await ctx.send(embed=message)
+    elif isinstance(message, discord.Message):
+        msg = message
+    else:
+        raise ValueError(f"Invalid message type: {message.__class__.__name__}")
 
     added_emoji = []
     adding_emoji = asyncio.Lock()
