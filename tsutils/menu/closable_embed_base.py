@@ -1,4 +1,4 @@
-from discordmenu.embed.control import EmbedControl
+from discordmenu.embed.wrapper import EmbedWrapper
 from discordmenu.embed.menu import EmbedMenu
 
 from tsutils.menu.components.panes import MenuPanes
@@ -17,8 +17,8 @@ class ClosableEmbedMenuBase:
     @classmethod
     def message_control(cls, state):
         view = cls.view_types[state.view_type]
-        return EmbedControl(
-            [view.embed(state, state.props)],
+        return EmbedWrapper(
+            view.embed(state, state.props),
             []
         )
 
