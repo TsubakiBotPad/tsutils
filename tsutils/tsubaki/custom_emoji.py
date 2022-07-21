@@ -99,6 +99,15 @@ AWAKENING_ID_TO_EMOJI_NAME_MAP = {
     93: 'subattr_green',
     94: 'subattr_light',
     95: 'subattr_dark',
+    96: 'misc_tpa_super',
+    97: 'misc_skillcharge_super',
+    98: 'misc_autoheal_super',
+    99: 'oe_fire_super',
+    100: 'oe_water_super',
+    101: 'oe_wood_super',
+    102: 'oe_light_super',
+    103: 'oe_dark_super',
+    104: 'oe_heart_super',
 }
 
 AWAKENING_RESTRICTED_LATENT_VALUE_TO_EMOJI_NAME_MAP = {
