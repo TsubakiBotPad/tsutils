@@ -1,8 +1,8 @@
 from typing import Optional
 
 from discord import Message
-from discordmenu.embed.control import EmbedControl
 from discordmenu.embed.menu import EmbedMenu
+from discordmenu.embed.wrapper import EmbedWrapper
 
 from tsutils.menu.components.panes import MenuPanes, emoji_buttons
 from tsutils.menu.view.simple_text import SimpleTextView, SimpleTextViewState
@@ -18,8 +18,7 @@ class SimpleTextMenu:
 
     @staticmethod
     def menu():
-        embed = EmbedMenu(SimpleTextMenuPanes.transitions(), SimpleTextMenu.message_control,
-                          delete_func=SimpleTextMenu.respond_with_delete)
+        embed = EmbedMenu(SimpleTextMenuPanes.transitions(), SimpleTextMenu.message_control)
         return embed
 
     @staticmethod
@@ -39,8 +38,8 @@ class SimpleTextMenu:
         if state is None:
             return None
         reaction_list = state.reaction_list
-        return EmbedControl(
-            [SimpleTextView.embed(state)],
+        return EmbedWrapper(
+            SimpleTextView.embed(state),
             reaction_list
         )
 
