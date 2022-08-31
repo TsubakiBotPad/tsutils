@@ -47,7 +47,7 @@ def fix_emojis_for_server(emoji_list: Sequence[discord.Emoji], msg_text: str) ->
     with an emoji, but it has a slightly different name in another server.
     """
     # Find all emoji-looking things in the message
-    matches = re.findall(r'<a?:[0-9a-z_]+:\d{18}>', msg_text, re.IGNORECASE)
+    matches = re.findall(r'<a?:[0-9a-z_]+:\d{18,19}>', msg_text, re.IGNORECASE)
     if not matches:
         return msg_text
 
@@ -75,7 +75,7 @@ def replace_emoji_names_with_code(emoji_list: Sequence[discord.Emoji], msg_text:
     from other servers.
     """
     # First strip down actual emojis to just the names
-    msg_text = re.sub(r'<a?(:[0-9a-z_]+:)\d{18}>', r'\1', msg_text, flags=re.IGNORECASE)
+    msg_text = re.sub(r'<a?(:[0-9a-z_]+:)\d{18,19}>', r'\1', msg_text, flags=re.IGNORECASE)
 
     # Find all emoji-looking things in the message
     matches = re.findall(r':[0-9a-z_]+:', msg_text, re.IGNORECASE)
