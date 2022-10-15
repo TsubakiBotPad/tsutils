@@ -9,7 +9,7 @@ from discord.ext.commands import Bot
 from tsutils.enums import Server
 from tsutils.query_settings.converters import EmbedColor, InvalidArgument
 from tsutils.query_settings.enums import AltEvoSort, CardLevelModifier, CardModeModifier, CardPlusModifier, \
-    ChildMenuType, EvoGrouping, EvoToFocus, LsMultiplier, MonsterLinkTarget, OrModifierPriority, ShowHelp
+    ChildMenuType, EvoGrouping, EvoToFocus, LsMultiplier, MonsterLinkTarget, OrModifierPriority, ShowHelp, SkillDisplay
 
 SETTINGS_REGEX = re.compile(r'(?:--|—)(\w+)(?::(?:({)|)((?(2)[^}]+|\S+)))?')
 
@@ -18,7 +18,8 @@ class QuerySettings:
     # properties that need to be retained by the menu after a monster has been found
     # anything that's used only for the purpose of locating a monster/list of monsters once does not need to be here
     SERIALIZED_NAMES = ['server', 'evosort', 'child_menu_type', 'lsmultiplier', 'cardplus', 'evogrouping',
-                        'cardmode', 'cardlevel', 'linktarget', 'embedcolor', 'showhelp']
+                        'cardmode', 'cardlevel', 'linktarget', 'embedcolor', 'showhelp', 'skilldisplay',
+                        ]
 
     NAMES_TO_ENUMS: Dict[str, EnumMeta] = {
         'na_prio': EvoToFocus,
@@ -33,6 +34,7 @@ class QuerySettings:
         'cardlevel': CardLevelModifier,
         'linktarget': MonsterLinkTarget,
         'showhelp': ShowHelp,
+        'skilldisplay': SkillDisplay,
     }
     NAMES_TO_CONVERTERS = {
         'embedcolor': EmbedColor,
@@ -69,6 +71,8 @@ class QuerySettings:
         'chesterip': MonsterLinkTarget.padindex,
         'help': ShowHelp.help,
         'content': ShowHelp.content,
+        'skilltexts': SkillDisplay.skilltexts,
+        'skillnames': SkillDisplay.skillnames,
     }
 
     ENUMS_TO_NAMES = {v: k for k, v in NAMES_TO_ENUMS.items()}
