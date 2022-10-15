@@ -56,3 +56,8 @@ class OrModifierPriority(Enum):
 class ShowHelp(Enum):
     help = True
     content = False
+
+
+class SkillDisplay(Enum):
+    skilltexts = 0
+    skillnames = 1
