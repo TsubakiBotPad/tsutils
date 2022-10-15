@@ -90,6 +90,7 @@ class QuerySettings:
                  cardlevel: CardLevelModifier = CardLevelModifier.lv110,
                  linktarget: MonsterLinkTarget = MonsterLinkTarget.padindex,
                  showhelp: ShowHelp = ShowHelp.content,
+                 skilldisplay: SkillDisplay = SkillDisplay.skilltexts,
 
                  embedcolor: str = "0",
                  ):
@@ -105,6 +106,7 @@ class QuerySettings:
         self.cardlevel = cardlevel
         self.linktarget = linktarget
         self.showhelp = showhelp
+        self.skilldisplay = skilldisplay
 
         self._embedcolor = embedcolor
 
