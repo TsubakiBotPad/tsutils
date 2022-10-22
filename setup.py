@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="tsutils",
-    version="7.2.12",
+    version="7.2.13",
     author="The Tsubotki Team",
     author_email="69992611+TsubakiBotPad@users.noreply.github.com",
     license="MIT",
