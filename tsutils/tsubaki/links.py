@@ -76,8 +76,10 @@ class MonsterLink:
     def header_link(m, query_settings: Optional[QuerySettings] = None):
         if not m.on_na:
             return MonsterLink.padindex(m)
-        if query_settings is None:
+        elif not m.on_jp:
+            return MonsterLink.ilmina(m)
+
+        if query_settings is None or query_settings.linktarget == MonsterLinkTarget.padindex:
             return MonsterLink.padindex(m)
-        return MonsterLink.padindex(m) \
-            if query_settings.linktarget == MonsterLinkTarget.padindex \
-            else MonsterLink.ilmina(m)
+        else:
+            return MonsterLink.ilmina(m)
