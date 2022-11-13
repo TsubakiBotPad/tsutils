@@ -15,7 +15,7 @@ class MonsterHeader:
                    use_emoji=False):
         return Text('{}{} {}'.strip().format(
             get_attribute_emoji_by_monster(m) if use_emoji else '',
-            '\N{REGIONAL INDICATOR SYMBOL LETTER U}\N{REGIONAL INDICATOR SYMBOL LETTER S}' if m.server_priority == Server.NA else '',
+            '\N{REGIONAL INDICATOR SYMBOL LETTER U}\N{REGIONAL INDICATOR SYMBOL LETTER S}' if m.server_priority == Server.NA and is_jp_buffed else '',
             cls._maybe_tsubaki(m, is_tsubaki=is_tsubaki, is_jp_buffed=bool(is_jp_buffed))))
 
     @classmethod
