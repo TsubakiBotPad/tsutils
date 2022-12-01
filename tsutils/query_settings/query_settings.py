@@ -38,6 +38,7 @@ class QuerySettings:
     }
     NAMES_TO_CONVERTERS = {
         'embedcolor': EmbedColor,
+        'favcard': MonsterConverter,
     }
     SETTINGS_TO_ENUMS = {
         # not serialized
@@ -93,6 +94,7 @@ class QuerySettings:
                  skilldisplay: SkillDisplay = SkillDisplay.skilltexts,
 
                  embedcolor: str = "0",
+                 favcard: str = "3260",
                  ):
         self.na_prio = na_prio
         self.ormod_prio = ormod_prio
@@ -109,6 +111,7 @@ class QuerySettings:
         self.skilldisplay = skilldisplay
 
         self._embedcolor = embedcolor
+        self._favcard = favcard
 
     @property
     def embedcolor(self) -> discord.Color:
@@ -118,6 +121,10 @@ class QuerySettings:
             return discord.Color(random.randint(0x000000, 0xffffff))
         else:
             return discord.Color(int(self._embedcolor))
+
+    @property
+    def favcard(self) -> int:
+        return int(self._favcard)
 
     @classmethod
     def extract(cls, fm_flags: Dict[str, Any], query: str, *, force_valid: bool = False) \
