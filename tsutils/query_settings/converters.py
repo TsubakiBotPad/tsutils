@@ -64,3 +64,12 @@ class EmbedColor(QSConverter):
             return str(int(arg.lstrip("#"), 16))
         else:
             raise InvalidArgument(f"Invalid color: {arg}! Valid colors are any hexcode and {', '.join(cls.COLORS)}")
+
+
+class MonsterConverter(QSConverter):
+    @classmethod
+    def parse(cls, arg):
+        if re.fullmatch(r'-?\d+', arg):
+            return arg
+        else:
+            raise InvalidArgument(f"Invalid monster ID: {arg}! Make sure only a numeric ID is passed.")
