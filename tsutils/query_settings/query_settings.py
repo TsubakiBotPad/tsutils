@@ -94,7 +94,7 @@ class QuerySettings:
                  skilldisplay: SkillDisplay = SkillDisplay.skilltexts,
 
                  embedcolor: str = "0",
-                 favcard: str = "3260",
+                 favcard: str = "0",
                  ):
         self.na_prio = na_prio
         self.ormod_prio = ormod_prio
