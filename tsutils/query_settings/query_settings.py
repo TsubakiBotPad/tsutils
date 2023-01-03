@@ -7,7 +7,7 @@ import discord
 from discord.ext.commands import Bot
 
 from tsutils.enums import Server
-from tsutils.query_settings.converters import EmbedColor, InvalidArgument
+from tsutils.query_settings.converters import EmbedColor, InvalidArgument, MonsterConverter
 from tsutils.query_settings.enums import AltEvoSort, CardLevelModifier, CardModeModifier, CardPlusModifier, \
     ChildMenuType, EvoGrouping, EvoToFocus, LsMultiplier, MonsterLinkTarget, OrModifierPriority, ShowHelp, SkillDisplay
 
