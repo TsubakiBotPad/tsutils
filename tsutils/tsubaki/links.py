@@ -6,11 +6,13 @@ from tsutils.query_settings.enums import MonsterLinkTarget
 from tsutils.query_settings.query_settings import QuerySettings
 
 CLOUDFRONT_URL = "https://d30r6ivozz8w2a.cloudfront.net"
+PICS_URL = "https://pics.tsubakibot.com/index.html"
 MEDIA_PATH = CLOUDFRONT_URL + '/media/'
 ICON_TEMPLATE = MEDIA_PATH + 'icons/{0:05d}.png'
 RPAD_PIC_TEMPLATE = MEDIA_PATH + 'portraits/{0:05d}.png?cachebuster=2'
 VIDEO_TEMPLATE = MEDIA_PATH + 'animated_portraits/{0:05d}.mp4'
 GIF_TEMPLATE = MEDIA_PATH + 'animated_portraits/{0:05d}.gif'
+SPINE_TEMPLATE = PICS_URL + '?m={0:d}'
 ORB_SKIN_TEMPLATE = MEDIA_PATH + 'orb_skins/jp/{0:03d}.png'
 ORB_SKIN_CB_TEMPLATE = MEDIA_PATH + 'orb_skins/jp/{0:03d}cb.png'
 
@@ -37,6 +39,10 @@ class MonsterImage:
     @staticmethod
     def gif(monster_no_jp: int):
         return GIF_TEMPLATE.format(monster_no_jp)
+
+    @staticmethod
+    def spine(monster_no_jp: int):
+        return SPINE_TEMPLATE.format(monster_no_jp)
 
     @staticmethod
     def orb_skin(orb_skin_id: int):
