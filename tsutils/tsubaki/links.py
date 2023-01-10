@@ -9,7 +9,7 @@ CLOUDFRONT_URL = "https://d30r6ivozz8w2a.cloudfront.net"
 PICS_URL = "https://pics.tsubakibot.com/index.html"
 MEDIA_PATH = CLOUDFRONT_URL + '/media/'
 ICON_TEMPLATE = MEDIA_PATH + 'icons/{0:05d}.png'
-RPAD_PIC_TEMPLATE = MEDIA_PATH + 'portraits/{0:05d}.png?cachebuster=2'
+RPAD_PIC_TEMPLATE = MEDIA_PATH + 'portraits/{0:05d}.png'
 VIDEO_TEMPLATE = MEDIA_PATH + 'animated_portraits/{0:05d}.mp4'
 GIF_TEMPLATE = MEDIA_PATH + 'animated_portraits/{0:05d}.gif'
 SPINE_TEMPLATE = PICS_URL + '?m={0:d}'
