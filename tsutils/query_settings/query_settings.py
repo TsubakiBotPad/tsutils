@@ -19,6 +19,7 @@ class QuerySettings:
     # anything that's used only for the purpose of locating a monster/list of monsters once does not need to be here
     SERIALIZED_NAMES = ['server', 'evosort', 'child_menu_type', 'lsmultiplier', 'cardplus', 'evogrouping',
                         'cardmode', 'cardlevel', 'linktarget', 'embedcolor', 'showhelp', 'skilldisplay',
+                        'favcard',
                         ]
 
     NAMES_TO_ENUMS: Dict[str, EnumMeta] = {
