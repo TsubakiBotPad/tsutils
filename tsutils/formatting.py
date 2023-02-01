@@ -69,3 +69,17 @@ def clean_global_mentions(content: str) -> str:
 def strip_right_multiline(txt: str) -> str:
     """Useful for prettytable output where there are a lot of right spaces."""
     return '\n'.join([x.strip() for x in txt.splitlines()])
+
+
+def filesize(size):
+    if type(size) == tuple:
+        size = size[0]
+    prefixes = ["", "K", "M", "G"]
+    i = 0
+    while True:
+        if size < 1000:
+            return f"{size}{prefixes[i]}B"
+        size = int(size / 1000)
+        i += 1
+        if i >= 4:
+            raise ValueError
