@@ -12,6 +12,7 @@ ICON_TEMPLATE = MEDIA_PATH + 'icons/{0:05d}.png'
 RPAD_PIC_TEMPLATE = MEDIA_PATH + 'portraits/{0:05d}.png'
 VIDEO_TEMPLATE = MEDIA_PATH + 'animated_portraits/{0:05d}.mp4'
 GIF_TEMPLATE = MEDIA_PATH + 'animated_portraits/{0:05d}.gif'
+HQ_GIF_TEMPLATE = MEDIA_PATH + 'animated_portraits/{0:05d}_hq.gif'
 SPINE_TEMPLATE = PICS_URL + '?m={0:d}'
 ORB_SKIN_TEMPLATE = MEDIA_PATH + 'orb_skins/jp/{0:03d}.png'
 ORB_SKIN_CB_TEMPLATE = MEDIA_PATH + 'orb_skins/jp/{0:03d}cb.png'
@@ -39,6 +40,10 @@ class MonsterImage:
     @staticmethod
     def gif(monster_no_jp: int):
         return GIF_TEMPLATE.format(monster_no_jp)
+
+    @staticmethod
+    def hq_gif(monster_no_jp: int):
+        return HQ_GIF_TEMPLATE.format(monster_no_jp)
 
     @staticmethod
     def spine(monster_no_jp: int):
