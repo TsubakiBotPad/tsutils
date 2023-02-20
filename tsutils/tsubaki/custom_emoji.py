@@ -108,6 +108,8 @@ AWAKENING_ID_TO_EMOJI_NAME_MAP = {
     102: 'oe_light_super',
     103: 'oe_dark_super',
     104: 'oe_heart_super',
+    105: 'misc_sb_minus',
+    106: 'misc_levitate',
 }
 
 AWAKENING_RESTRICTED_LATENT_VALUE_TO_EMOJI_NAME_MAP = {
