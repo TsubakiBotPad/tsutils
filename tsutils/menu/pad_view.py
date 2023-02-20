@@ -1,7 +1,8 @@
 from abc import abstractmethod, ABCMeta
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any, Union
 
 from discord import Colour
+from discordmenu.embed.base import Box
 from discordmenu.embed.components import EmbedMain, EmbedField, EmbedFooter, EmbedThumbnail, EmbedBodyImage
 from discordmenu.embed.view import EmbedView
 
@@ -65,12 +66,15 @@ class PadView(metaclass=ABCMeta):
         return embed_footer_with_state(state, qs=state.qs)
 
     @classmethod
-    @abstractmethod
     def embed_fields(cls, state: PadViewState) -> List[EmbedField]:
-        ...
+        return []
 
     @classmethod
     def embed_body_image(cls, state: PadViewState) -> Optional[EmbedBodyImage]:
+        return None
+
+    @classmethod
+    def embed_description(cls, state: PadViewState) -> Optional[Union[Box, str]]:
         return None
 
     @classmethod
@@ -79,7 +83,8 @@ class PadView(metaclass=ABCMeta):
             EmbedMain(
                 color=cls.embed_color(state),
                 title=cls.embed_title(state),
-                url=cls.embed_url(state)
+                url=cls.embed_url(state),
+                description=cls.embed_description(state)
             ),
             embed_thumbnail=cls.embed_thumbnail(state),
             embed_footer=cls.embed_footer(state),
