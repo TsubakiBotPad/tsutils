@@ -4,25 +4,32 @@ from typing import List, Optional, Dict, Any
 from discord import Colour
 from discordmenu.embed.components import EmbedMain, EmbedField, EmbedFooter, EmbedThumbnail, EmbedBodyImage
 from discordmenu.embed.view import EmbedView
-from discordmenu.embed.view_state import ViewState
-from tsutils.menu.components.config import UserConfig
 
+from tsutils.menu.components.config import UserConfig
 from tsutils.menu.components.footers import embed_footer_with_state
 from tsutils.query_settings.query_settings import QuerySettings
 
 
-class PadViewState(ViewState):
+# We don't subclass from ViewState becuase otherwise we'll get a billion lint warnings
+# that deserialize doesn't match the default method signature, and the benefit isn't
+# even that much
+class PadViewState:
     def __init__(self, original_author_id, menu_type, raw_query, query, qs: QuerySettings, extra_state):
-        super().__init__(original_author_id, menu_type, raw_query, extra_state=extra_state)
+        self.extra_state = extra_state or {}
+        self.menu_type = menu_type
+        self.original_author_id = original_author_id
+        self.raw_query = raw_query
         self.query = query
         self.qs = qs
 
     def serialize(self) -> Dict[str, Any]:
-        ret = super().serialize()
-        ret.update({
+        ret = {
+            'raw_query': self.raw_query,
+            'menu_type': self.menu_type,
+            'original_author_id': self.original_author_id,
             'query': self.query,
             'qs': self.qs.serialize(),
-        })
+        }
         return ret
 
     @classmethod
@@ -45,9 +52,8 @@ class PadView(metaclass=ABCMeta):
         ...
 
     @classmethod
-    @abstractmethod
     def embed_url(cls, state: PadViewState) -> Optional[str]:
-        ...
+        return None
 
     @classmethod
     def embed_thumbnail(cls, state: PadViewState) -> Optional[EmbedThumbnail]:

@@ -94,13 +94,13 @@ class MonsterLink:
         return PADINDEX_TEMPLATE.format(m.monster_no_jp)
 
     @staticmethod
-    def header_link(m, query_settings: Optional[QuerySettings] = None):
+    def header_link(m, qs: Optional[QuerySettings] = None):
         if not m.on_na:
             return MonsterLink.padindex(m)
         elif not m.on_jp:
             return MonsterLink.ilmina(m)
 
-        if query_settings is None or query_settings.linktarget == MonsterLinkTarget.padindex:
+        if qs is None or qs.linktarget == MonsterLinkTarget.padindex:
             return MonsterLink.padindex(m)
         else:
             return MonsterLink.ilmina(m)
