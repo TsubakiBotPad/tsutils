@@ -30,6 +30,7 @@ class PadViewState:
             'query': self.query,
             'qs': self.qs.serialize(),
         }
+        ret.update(self.extra_state)
         return ret
 
     @classmethod
