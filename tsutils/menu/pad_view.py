@@ -3,7 +3,7 @@ from typing import List, Optional, Dict, Any, Union
 
 from discord import Colour
 from discordmenu.embed.base import Box
-from discordmenu.embed.components import EmbedMain, EmbedField, EmbedFooter, EmbedThumbnail, EmbedBodyImage
+from discordmenu.embed.components import EmbedMain, EmbedField, EmbedFooter, EmbedThumbnail, EmbedBodyImage, EmbedAuthor
 from discordmenu.embed.view import EmbedView
 
 from tsutils.menu.components.config import UserConfig
@@ -49,9 +49,8 @@ class PadView(metaclass=ABCMeta):
         return state.qs.embedcolor
 
     @classmethod
-    @abstractmethod
     def embed_title(cls, state: PadViewState) -> Optional[str]:
-        ...
+        return None
 
     @classmethod
     def embed_url(cls, state: PadViewState) -> Optional[str]:
@@ -78,6 +77,10 @@ class PadView(metaclass=ABCMeta):
         return None
 
     @classmethod
+    def embed_author(cls, state: PadViewState) -> Optional[EmbedAuthor]:
+        return None
+
+    @classmethod
     def embed(cls, state: PadViewState) -> EmbedView:
         return EmbedView(
             EmbedMain(
@@ -86,6 +89,7 @@ class PadView(metaclass=ABCMeta):
                 url=cls.embed_url(state),
                 description=cls.embed_description(state)
             ),
+            embed_author=cls.embed_author(state),
             embed_thumbnail=cls.embed_thumbnail(state),
             embed_footer=cls.embed_footer(state),
             embed_body_image=cls.embed_body_image(state),
