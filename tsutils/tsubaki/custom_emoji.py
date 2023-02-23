@@ -130,7 +130,15 @@ def get_type_emoji(mons_type):
 def get_attribute_emoji_by_monster(monster):
     attr1 = monster.attr1.name.lower()
     attr2 = monster.attr2.name.lower()
-    emoji = "{}_{}".format(attr1, attr2) if attr1 != attr2 else 'orb_{}'.format(attr1)
+    attr3 = monster.attr3.name.lower()
+    is_2attr = monster.attr3.value == 6
+    is_2attr = True  # until emojis are ready
+    if attr1 == attr2 and is_2attr:
+        emoji = 'orb_{}'.format(attr1)
+    elif is_2attr:
+        emoji = "{}_{}".format(attr1, attr2)
+    else:
+        emoji = "{}_{}_{}".format(attr1, attr2, attr3)
     return get_emoji(emoji)
 
 
@@ -148,7 +156,10 @@ def get_rarity_emoji(rarity: int):
 
 
 def get_awakening_emoji(awid: Union[Enum, int], default: str = None):
-    return get_emoji(AWAKENING_ID_TO_EMOJI_NAME_MAP.get(awid if isinstance(awid, int) else awid.value, default))
+    name = AWAKENING_ID_TO_EMOJI_NAME_MAP.get(awid if isinstance(awid, int) else awid.value, default)
+    if name is None:
+        raise ValueError("Couldn't find expected awakening. Did you remember to update tsutils?")
+    return get_emoji(name)
 
 
 def get_emoji(name):

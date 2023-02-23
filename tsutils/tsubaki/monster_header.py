@@ -12,7 +12,8 @@ from tsutils.tsubaki.links import MonsterLink
 class MonsterHeader:
     @classmethod
     def menu_title(cls, m, *, is_tsubaki=False, is_jp_buffed=False,
-                   use_emoji=False):
+                   use_emoji=False,
+                   qs: Optional[QuerySettings] = None):
         return Text('{}{} {}'.strip().format(
             get_attribute_emoji_by_monster(m) if use_emoji else '',
             '\N{REGIONAL INDICATOR SYMBOL LETTER U}\N{REGIONAL INDICATOR SYMBOL LETTER S}' if m.server_priority == Server.NA else '',
