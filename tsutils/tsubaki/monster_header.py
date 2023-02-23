@@ -12,7 +12,8 @@ from tsutils.tsubaki.links import MonsterLink
 class MonsterHeader:
     @classmethod
     def menu_title(cls, m, *, is_tsubaki=False, is_jp_buffed=False,
-                   use_emoji=False):
+                   use_emoji=False,
+                   qs: Optional[QuerySettings] = None):
         return Text('{}{} {}'.strip().format(
             get_attribute_emoji_by_monster(m) if use_emoji else '',
             '\N{REGIONAL INDICATOR SYMBOL LETTER U}\N{REGIONAL INDICATOR SYMBOL LETTER S}' if m.server_priority == Server.NA else '',
@@ -20,22 +21,22 @@ class MonsterHeader:
 
     @classmethod
     def box_with_emoji(cls, m, *, link=True, prefix=None,
-                       query_settings: Optional[QuerySettings] = None):
+                       qs: Optional[QuerySettings] = None):
         msg = f"{m.monster_no_na} - {m.name_en}"
         suffix = cls._jp_suffix(m, False, False)
         return Box(
             prefix,
             Text(get_attribute_emoji_by_monster(m)),
-            LinkedText(msg, MonsterLink.header_link(m, query_settings=query_settings)) if link else Text(msg),
+            LinkedText(msg, MonsterLink.header_link(m, qs=qs)) if link else Text(msg),
             Text(suffix) if suffix else None,
             delimiter=' '
         )
 
     @classmethod
     def text_with_emoji(cls, m, *, prefix=None,
-                        query_settings: Optional[QuerySettings] = None):
+                        qs: Optional[QuerySettings] = None):
         return cls.box_with_emoji(m, link=False, prefix=prefix,
-                                  query_settings=query_settings).to_markdown()
+                                  qs=qs).to_markdown()
 
     @classmethod
     def _jp_suffix(cls, m, is_jp_buffed=False, subname_on_override=True):

@@ -12,7 +12,8 @@ def embed_footer():
     return EmbedFooter('Requester may click the reactions below to switch tabs')
 
 
-def embed_footer_with_state(state: ViewState, *, image_url=None, text=None, qs: QuerySettings = None):
+# Don't type state in case a cog makes its own local state type and it's not discord-menu ViewState
+def embed_footer_with_state(state, *, image_url=None, text=None, qs: QuerySettings = None):
     if image_url is None:
         # don't overwrite specified important images e.g. in link mirror
         if qs is not None and qs.favcard is not None:

@@ -1,14 +1,22 @@
 import urllib.parse
-from typing import Optional
+from typing import Optional, Union
 
 from tsutils.pad import get_pdx_id
 from tsutils.query_settings.enums import MonsterLinkTarget
 from tsutils.query_settings.query_settings import QuerySettings
 
+# cachebreak is a bit zzz because python gets real mad when fstrings are combined and
+# they only sometimes have text inside the brackets.
+# see: https://stackoverflow.com/questions/46768088/valueerror-cannot-switch-from-manual-field-specification-to-automatic-field-num
+# of course, this is not what we're doing, but still.
+
 CLOUDFRONT_URL = "https://d30r6ivozz8w2a.cloudfront.net"
 PICS_URL = "https://pics.tsubakibot.com/index.html"
 MEDIA_PATH = CLOUDFRONT_URL + '/media/'
-ICON_TEMPLATE = MEDIA_PATH + 'icons/{0:05d}.png'
+ICON_TEMPLATE = MEDIA_PATH + 'icons/{0:05d}'
+REGULAR_SUFFIX = '.png'
+CACHEBREAK_SUFFIX = '_{}.png'
+ICON_PATH = ICON_TEMPLATE + CACHEBREAK_SUFFIX
 RPAD_PIC_TEMPLATE = MEDIA_PATH + 'portraits/{0:05d}.png'
 VIDEO_TEMPLATE = MEDIA_PATH + 'animated_portraits/{0:05d}.mp4'
 GIF_TEMPLATE = MEDIA_PATH + 'animated_portraits/{0:05d}.gif'
@@ -26,8 +34,10 @@ PADINDEX_TEMPLATE = 'https://pad.chesterip.cc/{}'
 
 class MonsterImage:
     @staticmethod
-    def icon(idx: int):
-        return ICON_TEMPLATE.format(idx)
+    def icon(idx: int, cachebreak: Optional[Union[str, int]] = None):
+        if cachebreak is None:
+            return ICON_TEMPLATE.format(idx) + REGULAR_SUFFIX
+        return ICON_TEMPLATE.format(idx) + CACHEBREAK_SUFFIX.format(cachebreak)
 
     @staticmethod
     def picture(monster_id: int):
@@ -84,13 +94,13 @@ class MonsterLink:
         return PADINDEX_TEMPLATE.format(m.monster_no_jp)
 
     @staticmethod
-    def header_link(m, query_settings: Optional[QuerySettings] = None):
+    def header_link(m, qs: Optional[QuerySettings] = None):
         if not m.on_na:
             return MonsterLink.padindex(m)
         elif not m.on_jp:
             return MonsterLink.ilmina(m)
 
-        if query_settings is None or query_settings.linktarget == MonsterLinkTarget.padindex:
+        if qs is None or qs.linktarget == MonsterLinkTarget.padindex:
             return MonsterLink.padindex(m)
         else:
             return MonsterLink.ilmina(m)
