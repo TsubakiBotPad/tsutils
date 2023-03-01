@@ -132,7 +132,6 @@ def get_attribute_emoji_by_monster(monster):
     attr2 = monster.attr2.name.lower()
     attr3 = monster.attr3.name.lower()
     is_2attr = monster.attr3.value == 6
-    is_2attr = True  # until emojis are ready
     if attr1 == attr2 and is_2attr:
         emoji = 'orb_{}'.format(attr1)
     elif is_2attr:
