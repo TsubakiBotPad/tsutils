@@ -44,28 +44,28 @@ class MonsterImage:
         return RPAD_PIC_TEMPLATE.format(monster_id)
 
     @staticmethod
-    def video(monster_no_jp: int):
-        return VIDEO_TEMPLATE.format(monster_no_jp)
+    def video(monster_id: int):
+        return VIDEO_TEMPLATE.format(monster_id)
 
     @staticmethod
-    def gif(monster_no_jp: int):
-        return GIF_TEMPLATE.format(monster_no_jp)
+    def gif(monster_id: int):
+        return GIF_TEMPLATE.format(monster_id)
 
     @staticmethod
-    def hq_gif(monster_no_jp: int):
-        return HQ_GIF_TEMPLATE.format(monster_no_jp)
+    def hq_gif(monster_id: int):
+        return HQ_GIF_TEMPLATE.format(monster_id)
 
     @staticmethod
-    def spine(monster_no_jp: int):
-        return SPINE_TEMPLATE.format(monster_no_jp)
+    def spine(monster_id: int):
+        return SPINE_TEMPLATE.format(monster_id)
 
     @staticmethod
-    def orb_skin(orb_skin_id: int):
-        return ORB_SKIN_TEMPLATE.format(orb_skin_id)
+    def orb_skin(monster_id: int):
+        return ORB_SKIN_TEMPLATE.format(monster_id)
 
     @staticmethod
-    def orb_skin_colorblind(orb_skin_id: int):
-        return ORB_SKIN_CB_TEMPLATE.format(orb_skin_id)
+    def orb_skin_colorblind(monster_id: int):
+        return ORB_SKIN_CB_TEMPLATE.format(monster_id)
 
 
 class MonsterLink:

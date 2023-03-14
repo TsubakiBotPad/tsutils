@@ -22,7 +22,7 @@ class MonsterHeader:
     @classmethod
     def box_with_emoji(cls, m, *, link=True, prefix=None,
                        qs: Optional[QuerySettings] = None):
-        msg = f"{m.monster_no_na} - {m.name_en}"
+        msg = f"{m.monster_no} - {m.name_en}"
         suffix = cls._jp_suffix(m, False, False)
         return Box(
             prefix,
@@ -57,4 +57,4 @@ class MonsterHeader:
         """
         tsubaki_punctuation = '!' if is_tsubaki else ''
         suffix = cls._jp_suffix(m, is_jp_buffed)
-        return f'[{m.monster_no_na}] {m.name_en}{tsubaki_punctuation}{suffix}'
+        return f'[{m.monster_no}] {m.name_en}{tsubaki_punctuation}{suffix}'
